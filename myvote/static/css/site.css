@@ -144,6 +144,26 @@ form input[type="button"]:active {
   transform: translateY(0px);
 }
 
+/* POLLS */
+
+div.poll_viewer_container {
+  max-width: 50vw;
+  margin: 0 auto;
+}
+
+div.poll_viewer {
+  display: inline-block;
+  border: 1px solid #ddd;
+  margin: 0.5em 0.25em;
+  padding: 0.25em;
+  box-shadow: 2px 2px 2px 2px rgba(0,0,0,0.05);
+  transition: box-shadow 0.2s;
+}
+
+div.poll_viewer:hover {
+  box-shadow: 3px 3px 3px 3px rgba(0,0,0,0.1);
+}
+
 
 /* HELPER */
 .text-center {

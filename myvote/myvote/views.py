@@ -8,7 +8,11 @@ from .forms import PollCreationForm, PollDeletionForm
 
 def index(request):
     """ Renders homepage/index view. """
-    return render(request, 'myvote/index.html')
+    if request.user.is_authenticated:
+        polls = Poll.objects.filter(owner=request.user)
+    else:
+        polls = None
+    return render(request, 'myvote/index.html', {'polls': polls})
 
 
 @login_required

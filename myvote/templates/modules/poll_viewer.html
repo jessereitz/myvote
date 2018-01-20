@@ -1,0 +1,16 @@
+<div class="text-center poll_viewer">
+  <table class="inline-block_center text-center">
+    <tr>
+        <th colspan="2">
+          <a href="{% url 'view poll' poll_id=poll.id %}">{{ poll.name }}</a>
+        </th>
+    </tr>
+    <tr><th>Option</th><th>Votes</th></tr>
+    {% for option in poll.options.all %}
+    <tr>
+      <td>{{ option.option_text }}</td>
+      <td>{{ option.votes.count }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>

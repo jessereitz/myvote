@@ -8,6 +8,14 @@
 
   {% if user.is_authenticated %}
     <h1>Welcome, {{ user.username }}</h1>
+    <h2 class="text-center">Your Polls</h2>
+    {% if polls %}
+      <div class="text-center poll_viewer_container">
+      {% for poll in polls %}
+        {% include "modules/poll_viewer.html" %}
+      {% endfor %}
+      </div>
+    {% endif %}
 
   {% else %}
     <h1 class="text-center">Welcome to MyVote</h1>
