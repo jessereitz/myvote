@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+  <h1 class="text-center">Sign up for MyVote</h1>
+  <form method="POST" novalidate class="block_center">
+    {% csrf_token %}
+    {{ form }}
+    <div class="text-center">
+      <input type="submit" value="Create an account" class="green-background">
+    </div>
+  </form>
+{% endblock %}

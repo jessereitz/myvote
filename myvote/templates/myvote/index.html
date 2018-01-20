@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+{% block homeactive %}current_page{% endblock %}
+
+{% block content %}
+
+
+  {% if user.is_authenticated %}
+    <h1>Welcome, {{ user.username }}</h1>
+
+  {% else %}
+    <h1 class="text-center">Welcome to MyVote</h1>
+    <p class="block_center">
+      MyVote is a free platform for creating and sharing polls. <a href="{% url 'account:signup' %}">Sign up</a>
+      so you can create as many polls as you want, share them with your friends, and follow other users!
+    </p>
+  {% endif %}
+{% endblock %}

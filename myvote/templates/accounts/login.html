@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+  <h1 class="text-center">Login</h1>
+  <form method="POST" novalidate class="block_center">
+    {% csrf_token %}
+    {{ form }}
+    <div class="text-center">
+      <input type="submit" value="Login" class="green-background">
+    </div>
+  </form>
+{% endblock %}

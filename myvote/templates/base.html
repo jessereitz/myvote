@@ -1,0 +1,16 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>{% block title %}{% endblock %} | MyVote</title>
+    <link href="{% static 'css/site.css' %}" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    {% include "modules/header.html" %}
+    <section id="mainContainer">
+    {% block content %}{% endblock %}
+    </section>
+    {% include "modules/footer.html" %}
+  </body>
+</html>

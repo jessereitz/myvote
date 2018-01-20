@@ -1,0 +1,96 @@
+MyVote | A polling application
+
+Features:
+1 - Create and delete a user account
+2 - Follow other users
+3 - Create and delete polls
+4 - Vote on other's people polls (once)
+
+
+Models:
+- User -
+  - username
+  - email
+  - password
+  - followed (list of User)
+
+- Polls -
+  - owner_id
+  - title
+  - options (list of Options)
+
+- Options -
+  - poll_id
+  - text
+  - votes
+
+
+Views:
+- Modules √ -
+  - Header √
+    - Logo/link home
+    - link home
+    @logged_out
+      - link sign up
+      - link login
+    @logged_in
+      - link create poll
+      - link account
+      - link sign out
+  - Footer √
+    - ©2018 myvote
+
+  - Form Template
+
+- Base View - √
+  - Header
+  - block content
+  - Footer
+
+- Index (Base View) -
+ @logged_out √
+  - description of myvote
+
+  @logged_in
+  - tabbed view:
+    - recent polls (everyone)
+    - my network recent polls (only followed)
+    - my polls
+  - create poll button/link
+  - # of followers
+
+- Create Poll (Base View) @logged_in -
+  - Form
+    - title
+    - description (opt)
+    - choices (2+)
+    - submit/create
+
+- View Poll (Base View) -
+  @logged_out && @already_voted
+  - poll.title
+  - poll.description
+  - poll.options | option.votes
+
+  @logged_in
+  - poll.title
+  - poll.description
+  - poll.options | button vote
+
+- Account (Base View) @logged_in -
+  - link change email
+  - link reset password
+  - link delete account
+
+- Account | change email @logged_in -
+  - Form
+    - new email
+
+- Account | change password @logged_in -
+  - Form
+    - old pw
+    - new pw1
+    - new pw2
+
+- Account | delete @logged_in -
+  - link confirm delete

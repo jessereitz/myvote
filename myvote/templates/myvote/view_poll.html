@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}View Poll: {{ poll.name }}{% endblock %}
+
+{% block content %}
+<h1 class="text-center">View Poll: <i>{{ poll.name }}</i></h1>
+<div class="text-center">
+  <a href="#">Vote on this poll!</a>
+</div>
+<div class="text-center">
+<table class="inline-block_center text-center">
+  <tr><th>Option</th><th>Votes</th></tr>
+  {% for option in poll.options.all %}
+  <tr><td>{{ option.option_text }}</td><td>{{ option.votes.count }}</td></tr>
+  {% endfor %}
+</table>
+</div>
+
+{% endblock %}
