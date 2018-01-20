@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 class Poll(models.Model):
     name = models.CharField(max_length=100)
-    owner = models.ForeignKey(User, on_delete='CASCADE', related_name='polls')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='polls')
 
     def __str__(self):
         return self.name
@@ -19,12 +19,12 @@ class Poll(models.Model):
 
 class Option(models.Model):
     option_text = models.CharField(max_length=100)
-    poll = models.ForeignKey(Poll, on_delete='CASCADE', related_name='options')
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name='options')
 
     def __str__(self):
         return self.option_text
 
 class Vote(models.Model):
-    option = models.ForeignKey(Option, on_delete='CASCADE', related_name='votes')
-    owner = models.ForeignKey(User, on_delete='CASCADE', related_name='+')
-    poll = models.ForeignKey(Poll, on_delete='CASCADE', related_name='+')
+    option = models.ForeignKey(Option, on_delete=models.CASCADE, related_name='votes')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='+')
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name='+')

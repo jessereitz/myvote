@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Delete Poll{% endblock %}
+
+{% block content %}
+  <h1>Delete Poll: <i>{{ poll.name }}</i></h1>
+  <form method="POST" novalidate class="block_center">
+    {% csrf_token %}
+    <h2>Are you sure you want to delete this poll?</h2>
+    <i>This action can't be undone.</i>
+    <div class="text-center">
+      <input type="submit" value="DELETE" class="red-background">
+      <a href="{% url 'home' %}" class="link_button">Cancel</a>
+    </div>
+  </form>
+{% endblock %}

@@ -8,18 +8,23 @@
   <p class="block_center text-center">You have already voted on this poll</p>
 {% endif %}
 <div class="text-center">
-<table class="inline-block_center text-center">
-  <tr><th>Option</th><th>Votes</th></tr>
-  {% for option in poll.options.all %}
-  <tr>
-    <td>{{ option.option_text }}</td>
-    <td>{{ option.votes.count }}</td>
-    {% if not user_has_voted %}
-    <td><a href="{% url 'vote poll' poll_id=poll.id option_id=option.id %}">Vote</a></td>
-    {% endif %}
-  </tr>
-  {% endfor %}
-</table>
+  <table class="inline-block_center text-center">
+    <tr><th>Option</th><th>Votes</th></tr>
+    {% for option in poll.options.all %}
+    <tr>
+      <td>{{ option.option_text }}</td>
+      <td>{{ option.votes.count }}</td>
+      {% if not user_has_voted %}
+      <td><a href="{% url 'vote poll' poll_id=poll.id option_id=option.id %}">Vote</a></td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+  </table>
+  {% if user == poll.owner %}
+  <div class="text-center">
+    <a href="{% url 'delete poll' poll_id=poll.id %}" class="link_button red-background">Delete this poll</a>
+  </div>
+  {% endif %}
 </div>
 
 {% endblock %}

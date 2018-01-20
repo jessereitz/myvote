@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from .models import Poll, Option, Vote
-from .forms import PollCreationForm
+from .forms import PollCreationForm, PollDeletionForm
 
 def index(request):
     """ Renders homepage/index view. """
@@ -59,8 +59,24 @@ def vote_poll(request, poll_id, option_id):
             messages.add_message(request, messages.SUCCESS, "Vote recorded successfully!")
 
     return redirect(reverse('view poll', args=(poll.id,)))
-    # if not get_object_or_404(Vote, owner=request.user):
-    #     print("\n\n\n\nNo vote for this user")
-    # option = get_object_or_404(Option, pk=option_id)
-    # vote = Vote(option=option, owner=request.user)
-    # vote.save()
+
+@login_required
+def delete_poll(request, poll_id):
+    """
+        If current user is logged in and owns poll, deletes poll with given poll_id.
+    """
+    poll = get_object_or_404(Poll, pk=poll_id)
+    if request.user == poll.owner:
+        if request.method == 'POST':
+            # if current user is poll owner and has submitted post request, delete poll
+            deleted = poll.delete()
+            messages.add_message(request, messages.SUCCESS, "Poll successfully deleted")
+            return redirect(reverse('home'))
+        else:
+            # if current user is poll owner and submits get request, display delete form
+            form = PollDeletionForm()
+            return render(request, 'myvote/delete_poll.html', {'poll': poll, 'form': form})
+    else:
+        # if current user is NOT poll owner, redirect home
+        messages.add_message(request, messages.ERROR, "You do not have permission to delete that poll")
+        return redirect(reverse('home'))

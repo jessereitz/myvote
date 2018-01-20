@@ -4,7 +4,7 @@ from django.test import TestCase
 
 from myvote.views import index, create_poll, view_poll, vote_poll
 from myvote.forms import PollCreationForm
-from myvote.models import Poll
+from myvote.models import Poll, Option
 
 class PollCreationTests(TestCase):
     def setUp(self):
@@ -20,6 +20,7 @@ class PollCreationTests(TestCase):
         get_response = self.client.get(self.create_poll_url)
         post_response = self.client.post(self.create_poll_url)
         self.assertRedirects(get_response, self.login_url)
+        self.assertRedirects(post_response, self.login_url)
 
     def test_response_contains_poll_creation_form_if_logged_in(self):
         """ Should return a view with an instance of PollCreationForm if user is logged in."""
@@ -66,4 +67,104 @@ class PollVotingTests(TestCase):
     def setUp(self):
         """ Creates a test user and a test poll. """
         self.user = User.objects.create_user(username="testuser", email="test@example.com", password="testpassword12")
-        pass
+        self.poll = Poll(name="test_poll", owner=self.user)
+        self.poll.save()
+        option1 = Option(option_text="test_option_1", poll=self.poll)
+        option1.save()
+        option2 = Option(option_text="test_option_2", poll=self.poll)
+        option2.save()
+        self.option1 = option1
+        self.option2 = option2
+        self.vote_poll_url = reverse('vote poll', kwargs={'poll_id': self.poll.id, 'option_id': option1.id})
+        self.view_poll_url = reverse('view poll', kwargs={'poll_id': self.poll.id})
+        self.login_url = reverse('account:login') + "?next=" + self.vote_poll_url
+
+
+    def test_not_logged_in_redirect(self):
+        """ Should redirect to login page if user is not logged in. """
+        response = self.client.get(self.vote_poll_url)
+        self.assertRedirects(response, self.login_url)
+        self.assertEqual(response.status_code, 302)
+
+    def test_logged_in_not_voted_redirect_to_view_poll(self):
+        """
+            Should redirect to view poll page if user is logged in and has
+            not yet voted on the poll.
+        """
+        login = self.client.login(username="testuser", password="testpassword12")
+        self.assertTrue(login)
+        response = self.client.get(self.vote_poll_url)
+        self.assertRedirects(response, self.view_poll_url)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(len(self.option1.votes.all()), 1)
+
+    def test_logged_in_already_voted_not_vote_again(self):
+        """
+            After a user has already voted they should not be allowed to vote
+            again.
+        """
+        login = self.client.login(username="testuser", password="testpassword12")
+        self.assertTrue(login)
+        response = self.client.get(self.vote_poll_url)
+        self.assertEqual(len(self.option1.votes.all()), 1)
+        response2 = self.client.get(self.vote_poll_url)
+        self.assertEqual(len(self.option1.votes.all()), 1)
+        self.assertEqual(len(self.option2.votes.all()), 0)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response2.status_code, 302)
+
+class PollDeletionTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username="testuser", email="test@example.com", password="testpassword12")
+        self.poll = Poll(name="test_poll", owner=self.user)
+        self.poll.save()
+        option1 = Option(option_text="test_option_1", poll=self.poll)
+        option1.save()
+        option2 = Option(option_text="test_option_2", poll=self.poll)
+        option2.save()
+        self.option1 = option1
+        self.option2 = option2
+        self.delete_poll_url = reverse('delete poll', kwargs={'poll_id': self.poll.id})
+        self.login_url = reverse('account:login') + "?next=" + self.delete_poll_url
+
+
+    def test_not_logged_in_delete_poll_redirects(self):
+        """
+            Should redirect user to login page if not logged in.
+        """
+        get_response = self.client.get(self.delete_poll_url)
+        post_response = self.client.post(self.delete_poll_url)
+        self.assertEqual(get_response.status_code, 302)
+        self.assertEqual(post_response.status_code, 302)
+        self.assertRedirects(get_response, self.login_url)
+        self.assertRedirects(post_response, self.login_url)
+
+    def test_logged_in_not_owner_delete_poll_denied(self):
+        """
+            Should redirect to home page if logged-in user tries to delete
+            another user's poll.
+        """
+        user2 = User.objects.create_user(username="testuser2", email="test2@example.com", password="testpassword12")
+        login = self.client.login(username="testuser2", password="testpassword12")
+        get_response = self.client.get(self.delete_poll_url)
+        post_response = self.client.post(self.delete_poll_url)
+        self.assertEqual(get_response.status_code, 302)
+        self.assertEqual(post_response.status_code, 302)
+        self.assertRedirects(get_response, reverse('home'))
+        self.assertRedirects(post_response, reverse('home'))
+        self.assertEqual(len(self.user.polls.all()), 1)
+
+    def test_logged_in_delete_owned_poll(self):
+        """
+            Should display delete button on get. Should delete logged-in user's
+            own poll on POST.
+        """
+        login = self.client.login(username="testuser", password="testpassword12")
+        get_response = self.client.get(self.delete_poll_url)
+        self.assertEqual(get_response.status_code, 200)
+        self.assertEqual(len(self.user.polls.all()), 1)
+
+        post_response = self.client.post(self.delete_poll_url)
+        self.assertEqual(post_response.status_code, 302)
+        self.assertRedirects(post_response, reverse('home'))
+        self.assertEqual(len(self.user.polls.all()), 0)
