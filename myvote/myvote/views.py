@@ -43,6 +43,7 @@ def view_poll(request, poll_id):
         user_has_voted = False
     return render(request, 'myvote/view_poll.html', {'poll': poll, 'user_has_voted': user_has_voted})
 
+@login_required
 def vote_poll(request, poll_id, option_id):
     poll = get_object_or_404(Poll, pk=poll_id)
     if poll.user_has_voted(request.user):

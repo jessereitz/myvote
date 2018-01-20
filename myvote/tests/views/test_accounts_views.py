@@ -7,14 +7,14 @@ from accounts.forms import SignUpForm
 
 class SignupTests(TestCase):
     def setUp(self):
-        url = reverse('signup')
+        url = reverse('account:signup')
         self.response = self.client.get(url)
 
     def test_signup_status_code(self):
         self.assertEqual(self.response.status_code, 200)
 
     def test_signup_url_resolves_signup_view(self):
-        view = resolve('/signup/')
+        view = resolve('/account/signup/')
         self.assertEqual(view.func, signup)
 
     def test_csrf(self):
@@ -28,7 +28,7 @@ class SignupTests(TestCase):
 
 class SuccessfulSignUpTests(TestCase):
     def setUp(self):
-        url = reverse('signup')
+        url = reverse('account:signup')
         data = {
             'username': 'john',
             'email': 'john@does.com',
@@ -51,7 +51,7 @@ class SuccessfulSignUpTests(TestCase):
 
 class InvalidSignUpTests(TestCase):
     def setUp(self):
-        url = reverse('signup')
+        url = reverse('account:signup')
         self.response = self.client.post(url, {})
 
     def test_signup_status_code(self):
