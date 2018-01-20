@@ -4,4 +4,9 @@
 
 {% block content %}
   <h1>Account Overview</h1>
+  <ul>
+    <li><a href="{% url 'account:change password' %}">change password</a></li>
+    <li>Current email: {{ user.email }} <a href="{% url 'account:change email' %}">change email</a></li>
+    <li><a href="{% url 'account:delete account' %}">Delete Account</a></li>
+  </ul>
 {% endblock %}
