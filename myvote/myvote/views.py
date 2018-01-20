@@ -19,8 +19,6 @@ def create_poll(request):
             poll_name = form.cleaned_data['name']
             poll = Poll(name=poll_name, owner=request.user)
             poll.save()
-            print("\n\n\n\npoll id")
-            print(poll.id)
 
             option1_text = form.cleaned_data['option1']
             option1 = Option(option_text=option1_text, poll=poll)
@@ -39,19 +37,25 @@ def create_poll(request):
 
 def view_poll(request, poll_id):
     poll = get_object_or_404(Poll, pk=poll_id)
-
-    return render(request, 'myvote/view_poll.html', {'poll': poll})
+    if poll.user_has_voted(request.user):
+        user_has_voted = True
+    else:
+        user_has_voted = False
+    return render(request, 'myvote/view_poll.html', {'poll': poll, 'user_has_voted': user_has_voted})
 
 def vote_poll(request, poll_id, option_id):
     poll = get_object_or_404(Poll, pk=poll_id)
-    option = poll.options.filter(pk=option_id)
-    vote = Vote.objects.filter(owner=request.user, poll=poll)
-    if option and vote:
-        print("there's a vote and option!")
-    elif option:
-        print("there's no vote! But there is an option!")
+    if poll.user_has_voted(request.user):
+        messages.add_message(request, messages.ERROR, "You've already voted on this poll!")
     else:
-        print("theres nothing....")
+        try:
+            option = poll.options.get(pk=option_id)
+        except Exception:
+            messages.add_message(request, messages.ERROR, "No such option exists.")
+        else:
+            vote = Vote(option=option, owner=request.user, poll=poll)
+            vote.save()
+            messages.add_message(request, messages.SUCCESS, "Vote recorded successfully!")
 
     return redirect(reverse('view poll', args=(poll.id,)))
     # if not get_object_or_404(Vote, owner=request.user):

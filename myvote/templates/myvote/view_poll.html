@@ -4,14 +4,20 @@
 
 {% block content %}
 <h1 class="text-center">View Poll: <i>{{ poll.name }}</i></h1>
-<div class="text-center">
-  <a href="#">Vote on this poll!</a>
-</div>
+{% if user_has_voted %}
+  <p class="block_center text-center">You have already voted on this poll</p>
+{% endif %}
 <div class="text-center">
 <table class="inline-block_center text-center">
   <tr><th>Option</th><th>Votes</th></tr>
   {% for option in poll.options.all %}
-  <tr><td>{{ option.option_text }}</td><td>{{ option.votes.count }}</td></tr>
+  <tr>
+    <td>{{ option.option_text }}</td>
+    <td>{{ option.votes.count }}</td>
+    {% if not user_has_voted %}
+    <td><a href="{% url 'vote poll' poll_id=poll.id option_id=option.id %}">Vote</a></td>
+    {% endif %}
+  </tr>
   {% endfor %}
 </table>
 </div>
