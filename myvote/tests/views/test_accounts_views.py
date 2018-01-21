@@ -69,8 +69,8 @@ class AccountOverviewTests(TestCase):
         self.username = "testuser"
         self.password = "testpassword12"
         self.user = User.objects.create_user(username=self.username, password=self.password)
-        self.account_overview_url = reverse('account')
-        self.login_url = reverse('account:login') + "?next=/account_overview/"
+        self.account_overview_url = reverse('account:overview')
+        self.login_url = reverse('account:login') + "?next=/account/"
 
 
     def test_redirect_if_not_logged_in(self):

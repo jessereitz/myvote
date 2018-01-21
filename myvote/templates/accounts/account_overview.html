@@ -7,13 +7,17 @@
   <div class="text-center">
   <table class="inline-block_center text-left account_admin_table">
     <tr>
-      <td colspan="2">Password:</td>
-      <td><a href="{% url 'account:change password' %}">change</a></td>
+      <td>Username:</td>
+      <td colspan="2">{{ user.username }}</td>
     </tr>
     <tr>
       <td>Email:</td>
       <td>{{ user.email }}</td>
       <td><a href="{% url 'account:change email' %}">change</a></td>
+    </tr>
+    <tr>
+      <td colspan="2">Password:</td>
+      <td><a href="{% url 'account:change password' %}">change</a></td>
     </tr>
     <tr>
       <td colspan="3" class="text-center"><a href="{% url 'account:delete account' %}" class="link_button red-background">Delete Account</a></td>

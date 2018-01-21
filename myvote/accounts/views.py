@@ -18,10 +18,6 @@ def signup(request):
 
 @login_required
 def account_overview(request):
-    # TODO:
-    #   1 - Display link to change password
-    #   2 - Display link to change email
-    #   3 - Display link to delete account
     if request.user.is_authenticated:
         return render(request, 'accounts/account_overview.html')
 

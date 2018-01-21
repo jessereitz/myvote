@@ -161,7 +161,7 @@ div.poll_viewer {
 }
 
 div.poll_viewer:hover {
-  box-shadow: 3px 3px 3px 3px rgba(0,0,0,0.1);
+  box-shadow: 3px 3px 5px 2px rgba(0,0,0,0.1);
 }
 
 /* ACCOUNT ADMIN */
