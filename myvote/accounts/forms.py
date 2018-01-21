@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.contrib.auth.password_validation import validate_password, MinimumLengthValidator, CommonPasswordValidator, NumericPasswordValidator
 
 class SignUpForm(UserCreationForm):
 
@@ -28,7 +29,12 @@ class ChangePasswordForm(forms.Form):
         if not self.user.check_password(old_password):
             raise forms.ValidationError("Incorrect old password.")
 
-        if not new_password == new_password2:
+        if not new_password or not new_password == new_password2:
             raise forms.ValidationError("New passwords must match.")
+
+        if not any(char.isdigit() for char in new_password):
+            raise forms.ValidationError("New password must include at least one number.")
+            
+        validate_password(password=new_password, user=self.user)
 
         return cleaned_data
