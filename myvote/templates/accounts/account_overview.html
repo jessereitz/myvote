@@ -4,11 +4,19 @@
 
 {% block content %}
   <h1 class="text-center">Account Overview</h1>
-  <div class="block_center text-center">
-    <ul class="inline-block_center text-left">
-      <li><a href="{% url 'account:change password' %}">change password</a></li>
-      <li>Current email: {{ user.email }} <a href="{% url 'account:change email' %}">change email</a></li>
-      <li><a href="{% url 'account:delete account' %}">Delete Account</a></li>
-    </ul>
-  </div>
+  <div class="text-center">
+  <table class="inline-block_center text-left account_admin_table">
+    <tr>
+      <td colspan="2">Password:</td>
+      <td><a href="{% url 'account:change password' %}">change</a></td>
+    </tr>
+    <tr>
+      <td>Email:</td>
+      <td>{{ user.email }}</td>
+      <td><a href="{% url 'account:change email' %}">change</a></td>
+    </tr>
+    <tr>
+      <td colspan="3" class="text-center"><a href="{% url 'account:delete account' %}" class="link_button red-background">Delete Account</a></td>
+    </tr>
+  </table>
 {% endblock %}
