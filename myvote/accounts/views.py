@@ -45,8 +45,6 @@ def change_email(request):
     form = ChangeEmailForm(data=request.POST, user=request.user)
     if request.method == 'POST':
         if form.is_valid():
-            print("\n\n\nUSER EMAIL")
-            print(request.user)
             request.user.email = form.cleaned_data['new_email']
             request.user.save()
             messages.add_message(request, messages.SUCCESS, 'Email successfully updated')

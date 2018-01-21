@@ -295,7 +295,8 @@ class ChangeEmailTests(TestCase):
         }
         self.assertTrue(self.login())
         post_response = self.post_change_email(form_data)
-        self.assertRedirects(post_response, reverse('account:overview'), target_status_code=302)
+        self.assertEqual(post_response.status_code, 302)
+        self.assertRedirects(post_response, reverse('account:overview'))
         user = User.objects.get(pk=self.user.id)
         self.assertEqual(user.email, 'new@email.com')
 
@@ -312,7 +313,7 @@ class ChangeEmailTests(TestCase):
         self.assertTrue(self.login())
         post_response = self.post_change_email(form_data)
         self.assertEqual(post_response.status_code, 200)
-        form = post_response.get('form')
+        form = post_response.context.get('form')
         self.assertIsInstance(form, ChangeEmailForm)
         self.assertContains(post_response, 'New emails must match')
         user = User.objects.get(pk=self.user.id)
@@ -333,7 +334,7 @@ class ChangeEmailTests(TestCase):
         self.assertTrue(self.login())
         post_response = self.post_change_email(form_data)
         self.assertEqual(post_response.status_code, 200)
-        form = post_response.get('form')
+        form = post_response.context.get('form')
         self.assertIsInstance(form, ChangeEmailForm)
         self.assertContains(post_response, 'Incorrect password')
         user = User.objects.get(pk=self.user.id)
