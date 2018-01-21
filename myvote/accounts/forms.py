@@ -66,3 +66,7 @@ class ChangeEmailForm(forms.Form):
         validate_email(new_email)
 
         return cleaned_data
+
+class DeleteAccountForm(forms.Form):
+    password = forms.CharField(max_length=72, required=True, widget=forms.PasswordInput())
+    password2 = forms.CharField(max_length=72, required=True, widget=forms.PasswordInput())
