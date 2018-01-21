@@ -3,7 +3,7 @@ from django.urls import reverse, resolve
 from django.test import TestCase
 
 from accounts.views import signup
-from accounts.forms import SignUpForm, ChangePasswordForm
+from accounts.forms import SignUpForm, ChangePasswordForm, ChangeEmailForm
 
 class SignupTests(TestCase):
     def setUp(self):
@@ -140,9 +140,12 @@ class ChangePasswordTests(TestCase):
         post_response = self.client.post(self.change_password_url, form_data)
         self.assertEqual(post_response.status_code, 302)
         self.assertRedirects(post_response, reverse('account:overview'), target_status_code=302)
+        user = User.objects.get(pk=self.user.id)
+        self.assertTrue(user.check_password('newtestpassword12'))
         logout = self.client.logout()
         login = self.client.login(username=self.username, password="newtestpassword12")
         self.assertTrue(login)
+
 
     def test_user_logged_in_not_matching_passwords_redisplays_form(self):
         """
@@ -231,3 +234,108 @@ class ChangePasswordTests(TestCase):
         self.client.logout()
         re_login = self.client.login(username=self.username, password=self.password)
         self.assertTrue(re_login)
+
+
+class ChangeEmailTests(TestCase):
+    def setUp(self):
+        self.username = "testuser"
+        self.password = "testpassword12"
+        self.email = "test@example.com"
+        self.user = User.objects.create_user(username=self.username, password=self.password, email=self.email)
+        self.change_email_url = reverse('account:change email')
+        self.login_url = reverse('account:login') + "?next=/account/change_email/"
+
+    def login(self):
+        """
+            Reusable method to log in user created in the setUp method.
+        """
+        login = self.client.login(username=self.username, password=self.password)
+        return login
+
+    def get_change_email(self):
+        """
+            Reusable method to send get request to self.change_email_url.
+        """
+        return self.client.get(self.change_email_url)
+
+    def post_change_email(self, data):
+        """
+            Reusable method to send post request to self.change_email_url.
+        """
+        return self.client.post(self.change_email_url, data)
+
+    def test_user_not_logged_in_redirects_from_change_email(self):
+        """
+            Should redirect user to login page if they aren't logged in.
+        """
+        get_response = self.client.get(self.change_email_url)
+        post_response = self.client.post(self.change_email_url)
+        self.assertRedirects(get_response, self.login_url)
+        self.assertRedirects(post_response, self.login_url)
+
+    def test_user_logged_in_get_displays_change_email_form(self):
+        """
+            Should display a change email form if user is logged in.
+        """
+        self.assertTrue(self.login())
+        get_response = self.get_change_email()
+        self.assertEqual(get_response.status_code, 200)
+        form = get_response.context.get('form')
+        self.assertIsInstance(form, ChangeEmailForm)
+
+    def test_user_logged_in_post_changes_email(self):
+        """
+            Should successfully change a user's email if new email matches
+            confirmation and is an actual email.
+        """
+        form_data = {
+            'password': self.password,
+            'new_email': "new@email.com",
+            'new_email2': "new@email.com"
+        }
+        self.assertTrue(self.login())
+        post_response = self.post_change_email(form_data)
+        self.assertRedirects(post_response, reverse('account:overview'), target_status_code=302)
+        user = User.objects.get(pk=self.user.id)
+        self.assertEqual(user.email, 'new@email.com')
+
+    def test_user_logged_in_new_emails_dont_match(self):
+        """
+            Should redisplay ChangeEmailForm if new_email and new_email2 don't
+            match. User's email should NOT be changed.
+        """
+        form_data = {
+            'password': self.password,
+            'new_email': 'new@email.com',
+            'new_email2': 'wrong@email.com'
+        }
+        self.assertTrue(self.login())
+        post_response = self.post_change_email(form_data)
+        self.assertEqual(post_response.status_code, 200)
+        form = post_response.get('form')
+        self.assertIsInstance(form, ChangeEmailForm)
+        self.assertContains(post_response, 'New emails must match')
+        user = User.objects.get(pk=self.user.id)
+        self.assertEqual(user.email, self.email)
+        self.assertNotEqual(user.email, 'new@email.com')
+        self.assertNotEqual(user.email, 'wrong@email.com')
+
+    def test_user_logged_in_change_email_password_invalid(self):
+        """
+            Should redisplay ChangeEmail form if given password is incorrect.
+            Should NOT change email.
+        """
+        form_data = {
+            'password': 'wrongpassword12',
+            'new_email': "new@email.com",
+            'new_email2': "new@email.com"
+        }
+        self.assertTrue(self.login())
+        post_response = self.post_change_email(form_data)
+        self.assertEqual(post_response.status_code, 200)
+        form = post_response.get('form')
+        self.assertIsInstance(form, ChangeEmailForm)
+        self.assertContains(post_response, 'Incorrect password')
+        user = User.objects.get(pk=self.user.id)
+        self.assertEqual(user.email, self.email)
+        self.assertNotEqual(user.email, 'new@email.com')

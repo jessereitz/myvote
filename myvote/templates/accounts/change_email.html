@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
-{% block title %}Change Password{% endblock %}
+{% block title %}Change Email{% endblock %}
 
 {% block content %}
-  <h1 class="text-center">Change Your Password</h1>
+  <h1 class="text-center">Change Your Email Address</h1>
   <form method="POST" novalidate class="block_center">
     {% csrf_token %}
     {{ form }}

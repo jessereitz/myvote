@@ -55,18 +55,18 @@ Views:
   - tabbed view:
     - recent polls (everyone)
     - my network recent polls (only followed)
-    - my polls
-  - create poll button/link
+    - my polls √
+  - create poll button/link √
   - # of followers
 
-- Create Poll (Base View) @logged_in -
+- Create Poll (Base View) @logged_in  -
   - Form
-    - title
-    - description (opt)
+    - title √
+    - description (opt) √
     - choices (2+)
-    - submit/create
+    - submit/create √
 
-- View Poll (Base View) -
+- View Poll (Base View) √ -
   @logged_out && @already_voted
   - poll.title
   - poll.description
@@ -77,7 +77,7 @@ Views:
   - poll.description
   - poll.options | button vote
 
-- Account (Base View) @logged_in -
+- Account (Base View) @logged_in √ -
   - link change email
   - link reset password
   - link delete account
@@ -86,7 +86,7 @@ Views:
   - Form
     - new email
 
-- Account | change password @logged_in -
+- Account | change password @logged_in √ -
   - Form
     - old pw
     - new pw1

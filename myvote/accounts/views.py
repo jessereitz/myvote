@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 
-from .forms import SignUpForm, ChangePasswordForm
+from .forms import SignUpForm, ChangePasswordForm, ChangeEmailForm
 
 
 def signup(request):
@@ -25,7 +25,6 @@ def account_overview(request):
 
 @login_required
 def change_password(request):
-    # TODO: check new password matches django.contrib.auth password requirements
     if request.method == 'GET':
         request.POST = None
     form = ChangePasswordForm(data=request.POST, user=request.user)
@@ -40,7 +39,19 @@ def change_password(request):
 
 @login_required
 def change_email(request):
-    pass
+    if request.method == 'GET':
+        request.POST = None
+
+    form = ChangeEmailForm(data=request.POST, user=request.user)
+    if request.method == 'POST':
+        if form.is_valid():
+            print("\n\n\nUSER EMAIL")
+            print(request.user)
+            request.user.email = form.cleaned_data['new_email']
+            request.user.save()
+            messages.add_message(request, messages.SUCCESS, 'Email successfully updated')
+            return redirect('account:overview')
+    return render(request, 'accounts/change_email.html', {'form': form})
 
 @login_required
 def delete_account(request):
