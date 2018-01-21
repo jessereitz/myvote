@@ -25,15 +25,17 @@ def account_overview(request):
 
 @login_required
 def change_password(request):
+    # TODO: check new password matches django.contrib.auth password requirements
+    if request.method == 'GET':
+        request.POST = None
+    form = ChangePasswordForm(data=request.POST, user=request.user)
     if request.method == 'POST':
-        form = ChangePasswordForm(request.POST)
         if form.is_valid():
             request.user.set_password(form.cleaned_data['new_password'])
             request.user.save()
             messages.add_message(request, messages.SUCCESS, "Password successfully changed. Please login with your new password.")
             return redirect('account:overview')
-    else:
-        form = ChangePasswordForm()
+
     return render(request, 'accounts/change_password.html', {'form': form})
 
 @login_required

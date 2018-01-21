@@ -138,8 +138,74 @@ class ChangePasswordTests(TestCase):
         login = self.client.login(username=self.username, password=self.password)
         self.assertTrue(login)
         post_response = self.client.post(self.change_password_url, form_data)
-        self.assertRedirects(post_response, reverse('account:overview'))
+        self.assertEqual(post_response.status_code, 302)
+        self.assertRedirects(post_response, reverse('account:overview'), target_status_code=302)
         logout = self.client.logout()
-        self.assertTrue(logout)
         login = self.client.login(username=self.username, password="newtestpassword12")
         self.assertTrue(login)
+
+    def test_user_logged_in_not_matching_passwords_redisplays_form(self):
+        """
+            Should re-display ChangePasswordForm if user inputs correct password
+            but new passwords don't match. Should not change user's password.
+        """
+        form_data = {
+            "old_password": self.password,
+            "new_password": "newtestpassword12",
+            "new_password2": "wrongpassword12"
+        }
+        login = self.client.login(username=self.username, password=self.password)
+        self.assertTrue(login)
+        post_response = self.client.post(self.change_password_url, form_data)
+        form = post_response.context.get('form')
+        self.assertEqual(post_response.status_code, 200)
+        self.assertContains(post_response, "Change Your Password")
+        self.assertContains(post_response, "New passwords must match.")
+        self.assertIsInstance(form, ChangePasswordForm)
+        self.client.logout()
+        re_login = self.client.login(username=self.username, password=self.password)
+        self.assertTrue(re_login)
+
+    def test_user_logged_in_incorrect_old_password_redisplays_form(self):
+        """
+            Should re-display ChangePasswordForm if user inputs correct old
+            password. Should not change user's password.
+        """
+        form_data = {
+            "old_password": "wrongpassword12",
+            "new_password": "newtestpassword12",
+            "new_password2": "newtestpassword12"
+        }
+        login = self.client.login(username=self.username, password=self.password)
+        self.assertTrue(login)
+        post_response = self.client.post(self.change_password_url, form_data)
+        form = post_response.context.get('form')
+        self.assertEqual(post_response.status_code, 200)
+        self.assertContains(post_response, "Change Your Password")
+        self.assertContains(post_response, "Incorrect old password")
+        self.assertIsInstance(form, ChangePasswordForm)
+        self.client.logout()
+        re_login = self.client.login(username=self.username, password=self.password)
+        self.assertTrue(re_login)
+
+    def test_user_logged_in_new_passwords_match_but_not_django_approved(self):
+        """
+            Should re-display ChangePasswordForm if user correctly inputs old
+            password and new passwords match but don't match django's password
+            requirements.
+        """
+        form_data = {
+            "old_password": self.password,
+            "new_password": "pw",
+            "new_password2": "pw"
+        }
+        login = self.client.login(username=self.username, password=self.password)
+        self.assertTrue(login)
+        post_response = self.client.post(self.change_password_url, form_data)
+        # form = post_response.context.get('form')
+        self.assertEqual(post_response.status_code, 200)
+        self.assertContains(post_response, "Change Your Password")
+        self.assertIsInstance(form, ChangePasswordForm)
+        self.client.logout()
+        re_login = self.client.login(username=self.username, password=self.password)
+        self.assertTrue(re_login)
