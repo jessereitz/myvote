@@ -385,7 +385,7 @@ class DeleteAccountTests(TestCase):
         """
         self.assertTrue(self.login())
         get_response = self.get_delete_account()
-        self.assertEqual(get_resposne.status_code, 200)
+        self.assertEqual(get_response.status_code, 200)
         form = get_response.context.get('form')
         self.assertIsInstance(form, DeleteAccountForm)
 
@@ -398,10 +398,11 @@ class DeleteAccountTests(TestCase):
             'password': self.password,
             'password2': self.password
         }
+        self.assertTrue(self.login())
         post_response = self.post_delete_account(form_data)
         self.assertRedirects(post_response, reverse('home'))
-        user = User.object.get(pk=self.user.id)
-        self.assertFalse(user)
+        with self.assertRaisesMessage(User.DoesNotExist, "User matching query does not exist."):
+            user = User.objects.get(pk=self.user.id)
 
     def test_user_logged_in_invalid_passwords_dont_delete_account(self):
         """

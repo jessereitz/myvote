@@ -68,6 +68,6 @@ def delete_account(request):
                 messages.error(request, "This user does not exist.")
             except Exception:
                 messages.error(request, "Something went wrong. Please try again.")
-            else:
-                return redirect('home')
+
+            return redirect('home')
     return render(request, 'accounts/delete_account.html', {'form': form})
