@@ -188,7 +188,7 @@ class ChangePasswordTests(TestCase):
         re_login = self.client.login(username=self.username, password=self.password)
         self.assertTrue(re_login)
 
-    def test_user_logged_in_new_passwords_match_but_not_django_approved(self):
+    def test_user_logged_in_new_passwords_match_but_too_short(self):
         """
             Should re-display ChangePasswordForm if user correctly inputs old
             password and new passwords match but don't match django's password
@@ -202,7 +202,29 @@ class ChangePasswordTests(TestCase):
         login = self.client.login(username=self.username, password=self.password)
         self.assertTrue(login)
         post_response = self.client.post(self.change_password_url, form_data)
-        # form = post_response.context.get('form')
+        form = post_response.context.get('form')
+        self.assertEqual(post_response.status_code, 200)
+        self.assertContains(post_response, "Change Your Password")
+        self.assertIsInstance(form, ChangePasswordForm)
+        self.client.logout()
+        re_login = self.client.login(username=self.username, password=self.password)
+        self.assertTrue(re_login)
+
+    def test_user_logged_in_new_passwords_match_but_no_number(self):
+        """
+            Should re-display ChangePasswordForm if user correctly inputs old
+            password and new passwords match but don't match django's password
+            requirements.
+        """
+        form_data = {
+            "old_password": self.password,
+            "new_password": "testpassword",
+            "new_password2": "testpassword"
+        }
+        login = self.client.login(username=self.username, password=self.password)
+        self.assertTrue(login)
+        post_response = self.client.post(self.change_password_url, form_data)
+        form = post_response.context.get('form')
         self.assertEqual(post_response.status_code, 200)
         self.assertContains(post_response, "Change Your Password")
         self.assertIsInstance(form, ChangePasswordForm)
