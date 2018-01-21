@@ -3,7 +3,7 @@ from django.urls import reverse, resolve
 from django.test import TestCase
 
 from accounts.views import signup
-from accounts.forms import SignUpForm, ChangePasswordForm, ChangeEmailForm
+from accounts.forms import SignUpForm, ChangePasswordForm, ChangeEmailForm, DeleteAccountForm
 
 class SignupTests(TestCase):
     def setUp(self):
@@ -258,7 +258,7 @@ class ChangeEmailTests(TestCase):
         """
         return self.client.get(self.change_email_url)
 
-    def post_change_email(self, data):
+    def post_change_email(self, data=None):
         """
             Reusable method to send post request to self.change_email_url.
         """
@@ -268,8 +268,8 @@ class ChangeEmailTests(TestCase):
         """
             Should redirect user to login page if they aren't logged in.
         """
-        get_response = self.client.get(self.change_email_url)
-        post_response = self.client.post(self.change_email_url)
+        get_response = self.get_change_email()
+        post_response = self.post_change_email()
         self.assertRedirects(get_response, self.login_url)
         self.assertRedirects(post_response, self.login_url)
 
@@ -340,3 +340,112 @@ class ChangeEmailTests(TestCase):
         user = User.objects.get(pk=self.user.id)
         self.assertEqual(user.email, self.email)
         self.assertNotEqual(user.email, 'new@email.com')
+
+
+class DeleteAccountTests(TestCase):
+    def setUp(self):
+        self.username = "testuser"
+        self.password = "testpassword12"
+        self.user = User.objects.create_user(username=self.username, password=self.password)
+        self.delete_account_url = reverse('account:delete account')
+        self.login_url = reverse('account:login') + "?next=/account/delete_account/"
+
+    def login(self):
+        """
+            Reusable method to log in user created in the setUp method.
+        """
+        login = self.client.login(username=self.username, password=self.password)
+        return login
+
+    def get_delete_account(self):
+        """
+            Reusable method to send get request to self.delete_account_url.
+        """
+        return self.client.get(self.delete_account_url)
+
+    def post_delete_account(self, data=None):
+        """
+            Reusable method to send post request to self.change_email_url.
+        """
+        return self.client.post(self.delete_account_url, data)
+
+
+    def test_user_not_logged_in_redirects_from_delete_account(self):
+        """
+            Should redirect user to login page if they aren't logged in.
+        """
+        get_response = self.get_delete_account()
+        post_response = self.post_delete_account()
+        self.assertRedirects(get_response, self.login_url)
+        self.assertRedirects(post_response, self.login_url)
+
+    def test_user_logged_in_get_displays_delete_account_form(self):
+        """
+            Should display the DeleteAccountForm if user is logged in.
+        """
+        self.assertTrue(self.login())
+        get_response = self.get_delete_account()
+        self.assertEqual(get_resposne.status_code, 200)
+        form = get_response.context.get('form')
+        self.assertIsInstance(form, DeleteAccountForm)
+
+    def test_user_logged_in_post_deletes_account(self):
+        """
+            Should delete user's account if user is logged in and provided
+            information is valid.
+        """
+        form_data = {
+            'password': self.password,
+            'password2': self.password
+        }
+        post_response = self.post_delete_account(form_data)
+        self.assertRedirects(post_response, reverse('home'))
+        user = User.object.get(pk=self.user.id)
+        self.assertFalse(user)
+
+    def test_user_logged_in_invalid_passwords_dont_delete_account(self):
+        """
+            Should redisplay DeleteAccountForm if user provides invalid passwords.
+            Should NOT delete user's account
+        """
+        wrong_password1 = {
+            'password': 'wrongpassword',
+            'password2': self.password,
+        }
+        wrong_password2 = {
+            'password': self.password,
+            'password2': 'wrongpassword'
+        }
+        wrong_password_both = {
+            'password': 'wrongpassword',
+            'password2': 'wrongpassword'
+        }
+        wrong_password_both_different = {
+            'password': 'wrongpassword',
+            'password2': 'differentwrongpassword'
+        }
+        self.assertTrue(self.login())
+        post_response_1 = self.post_delete_account(wrong_password1)
+        user = User.objects.get(pk=self.user.id)
+        self.assertTrue(user)
+        post_response_2 = self.post_delete_account(wrong_password2)
+        user = User.objects.get(pk=self.user.id)
+        self.assertTrue(user)
+        post_response_3 = self.post_delete_account(wrong_password_both)
+        user = User.objects.get(pk=self.user.id)
+        self.assertTrue(user)
+        post_response_4 = self.post_delete_account(wrong_password_both_different)
+        user = User.objects.get(pk=self.user.id)
+        self.assertTrue(user)
+        self.assertEqual(post_response_1.status_code, 200)
+        self.assertEqual(post_response_2.status_code, 200)
+        self.assertEqual(post_response_3.status_code, 200)
+        self.assertEqual(post_response_4.status_code, 200)
+        form_1 = post_response_1.context.get('form')
+        form_2 = post_response_2.context.get('form')
+        form_3 = post_response_3.context.get('form')
+        form_4 = post_response_4.context.get('form')
+        self.assertIsInstance(form_1, DeleteAccountForm)
+        self.assertIsInstance(form_2, DeleteAccountForm)
+        self.assertIsInstance(form_3, DeleteAccountForm)
+        self.assertIsInstance(form_4, DeleteAccountForm)
