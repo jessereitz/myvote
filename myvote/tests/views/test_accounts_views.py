@@ -3,7 +3,7 @@ from django.urls import reverse, resolve
 from django.test import TestCase
 
 from accounts.views import signup
-from accounts.forms import SignUpForm
+from accounts.forms import SignUpForm, ChangePasswordForm
 
 class SignupTests(TestCase):
     def setUp(self):
@@ -72,7 +72,6 @@ class AccountOverviewTests(TestCase):
         self.account_overview_url = reverse('account:overview')
         self.login_url = reverse('account:login') + "?next=/account/"
 
-
     def test_redirect_if_not_logged_in(self):
         """
             Should redirect anonymous user to login page.
@@ -95,3 +94,52 @@ class AccountOverviewTests(TestCase):
         self.assertContains(response, reverse('account:change password'))
         self.assertContains(response, reverse('account:change email'))
         self.assertContains(response, reverse('account:delete account'))
+
+
+class ChangePasswordTests(TestCase):
+    def setUp(self):
+        self.username = "testuser"
+        self.password = "testpassword12"
+        self.user = User.objects.create_user(username=self.username, password=self.password)
+        self.change_password_url = reverse('account:change password')
+        self.login_url = reverse('account:login') + "?next=/account/change_password/"
+
+    def test_user_not_logged_in_redirects_from_change_password(self):
+        """
+            Should redirect user to login page if they aren't logged in.
+        """
+        get_response = self.client.get(self.change_password_url)
+        post_response = self.client.post(self.change_password_url, {})
+        self.assertRedirects(get_response, self.login_url)
+        self.assertRedirects(post_response, self.login_url)
+
+
+    def test_user_logged_in_get_displays_change_password_form(self):
+        """
+            Should display a change password form if user is logged in.
+        """
+        login = self.client.login(username=self.username, password=self.password)
+        self.assertTrue(login)
+        response = self.client.get(self.change_password_url)
+        form = response.context.get('form')
+        self.assertTrue(response.status_code, 200)
+        self.assertContains(response, "Change Your Password")
+        self.assertIsInstance(form, ChangePasswordForm)
+
+    def test_user_logged_in_post_changes_password(self):
+        """
+            Should successfully change user's password.
+        """
+        form_data = {
+            "old_password": self.password,
+            "new_password": "newtestpassword12",
+            "new_password2": "newtestpassword12"
+        }
+        login = self.client.login(username=self.username, password=self.password)
+        self.assertTrue(login)
+        post_response = self.client.post(self.change_password_url, form_data)
+        self.assertRedirects(post_response, reverse('account:overview'))
+        logout = self.client.logout()
+        self.assertTrue(logout)
+        login = self.client.login(username=self.username, password="newtestpassword12")
+        self.assertTrue(login)

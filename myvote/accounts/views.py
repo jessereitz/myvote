@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
-from .forms import SignUpForm
+
+from .forms import SignUpForm, ChangePasswordForm
 
 
 def signup(request):
@@ -23,7 +25,16 @@ def account_overview(request):
 
 @login_required
 def change_password(request):
-    pass
+    if request.method == 'POST':
+        form = ChangePasswordForm(request.POST)
+        if form.is_valid():
+            request.user.set_password(form.cleaned_data['new_password'])
+            request.user.save()
+            messages.add_message(request, messages.SUCCESS, "Password successfully changed. Please login with your new password.")
+            return redirect('account:overview')
+    else:
+        form = ChangePasswordForm()
+    return render(request, 'accounts/change_password.html', {'form': form})
 
 @login_required
 def change_email(request):
