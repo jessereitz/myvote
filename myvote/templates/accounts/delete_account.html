@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Delete Account{% endblock %}
+
+{% block content %}
+  <h1 class="text-center">Delete Your Account</h1>
+  <p class="block_center"><b>WARNING:</b> You are about to delete your account. This action cannot be
+    undone. Only continue if you are sure you want to permanently delete your account.</p>
+  <form method="POST" novalidate class="block_center">
+    {% csrf_token %}
+    {{ form }}
+    <div class="text-center">
+      <input type="submit" value="DELETE" class="red-background">
+      <a href="{% url 'account:overview' %}" class="link_button">Cancel</a>
+    </div>
+  </form>
+{% endblock %}

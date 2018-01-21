@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 
-from .forms import SignUpForm, ChangePasswordForm, ChangeEmailForm
+from .forms import SignUpForm, ChangePasswordForm, ChangeEmailForm, DeleteAccountForm
 
 
 def signup(request):
@@ -53,4 +54,20 @@ def change_email(request):
 
 @login_required
 def delete_account(request):
-    pass
+    if request.method == 'GET':
+        request.POST = None
+
+    form = DeleteAccountForm(data=request.POST, user=request.user)
+    if request.method == 'POST':
+        if form.is_valid():
+            try:
+                user = User.objects.get(pk=request.user.id)
+                user.delete()
+                messages.success(request, 'Your profile has been deleted.')
+            except User.DoesNotExist:
+                messages.error(request, "This user does not exist.")
+            except Exception:
+                messages.error(request, "Something went wrong. Please try again.")
+            else:
+                return redirect('home')
+    return render(request, 'accounts/delete_account.html', {'form': form})

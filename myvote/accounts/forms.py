@@ -70,3 +70,20 @@ class ChangeEmailForm(forms.Form):
 class DeleteAccountForm(forms.Form):
     password = forms.CharField(max_length=72, required=True, widget=forms.PasswordInput())
     password2 = forms.CharField(max_length=72, required=True, widget=forms.PasswordInput())
+
+    def __init__(self, user=None, data=None):
+        super().__init__(data=data)
+        self.user = user
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get('password')
+        password2 = cleaned_data.get('password2')
+
+        if not self.user.check_password(password):
+            raise forms.ValidationError("Incorrect password.")
+
+        if not password or not password == password2:
+            raise forms.ValidationError("Passwords must match.")
+
+        return cleaned_data
