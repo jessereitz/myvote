@@ -65,6 +65,38 @@ header nav a.current_page {
   border-bottom: 2px solid #888;
 }
 
+ul.messages {
+  margin-top: 0;
+  padding: 0;
+}
+
+ul.messages li {
+  display: block;
+  margin-top: 0;
+  padding: 0.5em;
+  text-align: center;
+}
+
+ul.messages li.success {
+  background: #82BF6E;
+  color: #fff;
+}
+
+ul.messages li.error {
+  background: #E94858 !important;
+  color: #fff;
+}
+
+ul.messages li.info {
+  background: #666;
+  color: #fff;
+}
+
+ul.messages li.warning {
+  background: orange;
+  color: #fff;
+}
+
 section#mainContainer {
   box-sizing: border-box;
   width: 100%;
@@ -85,6 +117,10 @@ form {
   display: block;
   width: 100%;
   max-width: 25em;
+}
+
+form div.text-center {
+  margin-top: 1em;
 }
 
 form ul.errorlist {
@@ -165,7 +201,7 @@ div.poll_viewer:hover {
 }
 
 /* ACCOUNT ADMIN */
-table.account_admin_table {
+/* table.account_admin_table {
   border: 1px solid #ddd;
   border-collapse: collapse;
   margin: 0.5em 0.25em;
@@ -186,6 +222,31 @@ table.account_admin_table td {
 }
 
 table.account_admin_table tr:hover {
+  background: #fafafa;
+} */
+
+table {
+  display: inline-block;
+  border: 1px solid #ddd;
+  border-collapse: collapse;
+  margin: 0.5em 0.25em;
+  padding: 0.25em;
+  box-shadow: 2px 2px 2px 2px rgba(0,0,0,0.05);
+}
+
+table tr {
+  border-bottom: 1px solid #ddd;
+}
+
+table tr:last-child {
+  border-bottom: none;
+}
+
+table td, table th {
+  padding: 1em 0.75em;
+}
+
+table tr:hover {
   background: #fafafa;
 }
 
@@ -220,6 +281,10 @@ table.account_admin_table tr:hover {
 .red-background {
   background: #E94858 !important;
   color: #fff;
+}
+
+.more-top-margin {
+  margin-top: 1em;
 }
 
 a.link_button {

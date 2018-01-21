@@ -12,6 +12,10 @@ def index(request):
         polls = Poll.objects.filter(owner=request.user)
     else:
         polls = None
+    # messages.success(request, 'This is a success message.')
+    # messages.error(request, 'This is an error message.')
+    # messages.info(request, 'This is an info message.')
+    # messages.warning(request, 'This is a warning message.')
     return render(request, 'myvote/index.html', {'polls': polls})
 
 
@@ -32,6 +36,7 @@ def create_poll(request):
             option2 = Option(option_text=option2_text, poll=poll)
             option2.save()
 
+            messages.success(request, 'Poll successfully created.')
             return redirect(reverse('view poll', args=(poll.id,)))
     else:
         form = PollCreationForm()

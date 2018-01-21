@@ -9,7 +9,7 @@
 {% endif %}
 <div class="text-center">
   <table class="inline-block_center text-center">
-    <tr><th>Option</th><th>Votes</th></tr>
+    <tr><th>Option</th><th>Votes</th><th></th></tr>
     {% for option in poll.options.all %}
     <tr>
       <td>{{ option.option_text }}</td>
@@ -21,7 +21,7 @@
     {% endfor %}
   </table>
   {% if user == poll.owner %}
-  <div class="text-center">
+  <div class="text-center more-top-margin">
     <a href="{% url 'delete poll' poll_id=poll.id %}" class="link_button red-background">Delete this poll</a>
   </div>
   {% endif %}

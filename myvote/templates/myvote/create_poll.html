@@ -7,6 +7,8 @@
   <form method="POST" novalidate class="block_center">
     {% csrf_token %}
     {{ form }}
-    <input type="submit" value="Create Poll" class="green-background">
+    <div class="text-center">
+      <input type="submit" value="Create Poll" class="green-background">
+    </div>
   </form>
 {% endblock %}
