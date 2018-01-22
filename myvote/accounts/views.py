@@ -7,6 +7,13 @@ from django.contrib import messages
 from .forms import SignUpForm, ChangePasswordForm, ChangeEmailForm, DeleteAccountForm
 from .models import FollowedUsers
 
+# TODO: Recent polls (votes?) on homepage
+# TODO: Viewable profile pages
+# TODO: Profile search? Maybe not though...
+# TODO: Share poll buttons
+# TODO: Email notifications (follows, and votes)
+# TODO: Make email notifications subscribable (add to account_overview)
+
 def signup(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
