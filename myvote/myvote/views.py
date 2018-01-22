@@ -43,6 +43,7 @@ def create_poll(request):
 
 
 def view_poll(request, poll_id):
+    # TODO: implement F() to protect against race conditions
     poll = get_object_or_404(Poll, pk=poll_id)
     if poll.user_has_voted(request.user):
         user_has_voted = True
