@@ -85,7 +85,6 @@ class AccountOverviewTests(TestCase):
             Should display page with account details and links to change them.
             Editable account details are: password, email address
         """
-        # TODO: Write the view!
         login = self.client.login(username=self.username, password=self.password)
         self.assertTrue(login)
         response = self.client.get(self.account_overview_url)
