@@ -23,4 +23,15 @@
       <td colspan="3" class="text-center"><a href="{% url 'account:delete account' %}" class="link_button red-background">Delete Account</a></td>
     </tr>
   </table>
+
+  <h2>Follow some users</h2>
+  <form method="POST" action="{% url 'account:follow user' user_id=1 %}">
+    {% csrf_token %}
+    <input type="submit" value="Follow user 1">
+  </form>
+
+  <form method="POST" action="{% url 'account:follow user' user_id=11 %}">
+    {% csrf_token %}
+    <input type="submit" value="Follow user 11">
+  </form>
 {% endblock %}

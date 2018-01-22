@@ -23,6 +23,23 @@
       </p>
     {% endif %}
 
+    {% if followed_users %}
+      {% for user in followed_users %}
+        {% for poll in user.followed.polls.all %}
+        <table>
+          <tr><th>Owner:</th><td>{{ poll.owner }}</td></tr>
+          <tr><th>Title:</th><td>{{ poll.name }}</td></tr>
+          <tr>
+            <td colspan="2" class="text-center">
+              <a href="{% url 'view poll' poll_id=poll.id %}">Check it out!</a>
+            </td>
+          </tr>
+        </table>
+        {% endfor %}
+        <br />
+      {% endfor %}
+    {% endif %}
+
   {% else %}
     <h1 class="text-center">Welcome to MyVote</h1>
     <p class="block_center">

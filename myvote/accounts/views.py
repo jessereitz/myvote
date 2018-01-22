@@ -4,9 +4,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
-
 from .forms import SignUpForm, ChangePasswordForm, ChangeEmailForm, DeleteAccountForm
-
+from .models import FollowedUsers
 
 def signup(request):
     if request.method == 'POST':
@@ -19,6 +18,26 @@ def signup(request):
     else:
         form = SignUpForm()
     return render(request, 'accounts/signup.html', {'form': form})
+
+@login_required
+def follow_user(request, user_id):
+    if request.method == 'POST':
+        next_url = request.POST.get('next') or 'home'
+        if request.user.id == user_id:
+            messages.error(request, "You cannot follow yourself.")
+            return redirect(next_url)
+        try:
+            followed_user = User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            messages.error(request, "This user does not exist.")
+            return redirect('home')
+        try:
+            relationship = FollowedUsers.objects.get(follower=request.user, followed=followed_user)
+        except FollowedUsers.DoesNotExist:
+            relationship = FollowedUsers(follower=request.user, followed=followed_user)
+            relationship.save()
+        return redirect(next_url)
+    return redirect('home')
 
 @login_required
 def account_overview(request):

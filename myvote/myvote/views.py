@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.contrib.auth.models import User
 
 from .models import Poll, Option, Vote
 from .forms import PollCreationForm, PollDeletionForm
@@ -10,13 +11,10 @@ def index(request):
     """ Renders homepage/index view. """
     if request.user.is_authenticated:
         polls = Poll.objects.filter(owner=request.user)
+        followed_users = request.user.followed.all()
     else:
         polls = None
-    # messages.success(request, 'This is a success message.')
-    # messages.error(request, 'This is an error message.')
-    # messages.info(request, 'This is an info message.')
-    # messages.warning(request, 'This is a warning message.')
-    return render(request, 'myvote/index.html', {'polls': polls})
+    return render(request, 'myvote/index.html', {'polls': polls, 'followed_users': followed_users})
 
 
 @login_required
