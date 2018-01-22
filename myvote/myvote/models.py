@@ -27,3 +27,4 @@ class Vote(models.Model):
     option = models.ForeignKey(Option, on_delete=models.CASCADE, related_name='votes')
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='+')
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name='+')
+    datetime = models.DateTimeField(auto_now_add=True)
