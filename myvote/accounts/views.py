@@ -7,7 +7,7 @@ from django.contrib import messages
 from .forms import SignUpForm, ChangePasswordForm, ChangeEmailForm, DeleteAccountForm
 from .models import FollowedUsers
 
-# TODO: Recent polls (votes?) on homepage
+# TODO: Change 'account' link in header to view own profile
 # TODO: Profile search? Maybe not though...
 # TODO: Share poll buttons
 # TODO: Email notifications (follows, and votes)

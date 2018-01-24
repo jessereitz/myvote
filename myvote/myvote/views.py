@@ -18,6 +18,11 @@ def index(request):
         followed_users = None
     return render(request, 'myvote/index.html', {'polls': polls, 'followed_polls': followed_polls})
 
+
+@login_required
+def view_recent_polls(request):
+    return redirect('home')    
+
 @login_required
 def create_poll(request):
     if request.method == 'POST':
