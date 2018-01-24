@@ -6,18 +6,19 @@
   <h1 class="text-center">{{ view_user.username }}</h1>
   <div class="text-center">
     {% if view_user != user %}
-      {% if not followed %}
+      {% if followed == False %}
         <form method="POST" action="{% url 'account:follow user' user_id=view_user.id %}" class="block_center">
           {% csrf_token %}
           <input type="hidden" name="next_url" value="{% url 'account:view profile' user_id=view_user.id %}">
           <input type="submit" value="Follow">
         </form>
-      {% else %}
-        <form method="POST" action="#" class="block_center">
+      {% elif followed == True %}
+        <form method="POST" action="{% url 'account:unfollow user' user_id=view_user.id %}" class="block_center">
           {% csrf_token %}
           <input type="hidden" name="next_url" value="{% url 'account:view profile' user_id=view_user.id %}">
           <input type="submit" value="Unfollow">
         </form>
+      {% else %}
       {% endif %}
     {% endif %}
 

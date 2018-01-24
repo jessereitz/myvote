@@ -8,7 +8,6 @@ from .forms import SignUpForm, ChangePasswordForm, ChangeEmailForm, DeleteAccoun
 from .models import FollowedUsers
 
 # TODO: Recent polls (votes?) on homepage
-# TODO: Viewable profile pages
 # TODO: Profile search? Maybe not though...
 # TODO: Share poll buttons
 # TODO: Email notifications (follows, and votes)
@@ -29,10 +28,7 @@ def signup(request):
 @login_required
 def follow_user(request, user_id):
     if request.method == 'POST':
-        print('\n\n\n')
-        print(request.POST.get('next_url'))
         next_url = request.POST.get('next_url') or 'home'
-        print(next_url)
         if request.user.id == user_id:
             messages.warning(request, "You cannot follow yourself.")
             return redirect(next_url)
@@ -50,6 +46,22 @@ def follow_user(request, user_id):
     return redirect('home')
 
 @login_required
+def unfollow_user(request, user_id):
+    if request.method == 'POST':
+        next_url = request.POST.get('next_url') or 'home'
+        if request.user.id == user_id:
+            messages.warning(request, "You cannot unfollow yourself.")
+            return redirect(next_url)
+        try:
+            relationship = FollowedUsers.objects.get(follower=request.user, followed_id=user_id)
+            relationship.delete()
+        except Exception as e:
+            # TODO: implement logging
+            print(e)
+        return redirect(next_url)
+
+
+@login_required
 def account_settings(request):
     """
         Display the settings page.
@@ -64,13 +76,17 @@ def account_view_profile(request, user_id):
     if not user_id:
         return redirect('home')
     else:
-        try:
-            relationship = request.user.followed.filter(followed_id=user_id).first()
-            view_user = relationship.followed
-            followed = True
-        except Exception as e:
+        if request.user.is_authenticated:
+            try:
+                relationship = request.user.followed.filter(followed_id=user_id).first()
+                view_user = relationship.followed
+                followed = True
+            except Exception as e:
+                view_user = get_object_or_404(User, pk=user_id)
+                followed = False
+        else:
             view_user = get_object_or_404(User, pk=user_id)
-            followed = False
+            followed = None
         return render(request, 'accounts/view_profile.html', {'view_user': view_user, 'followed': followed})
     return redirect('home')
 
