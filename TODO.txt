@@ -1,0 +1,9 @@
+TODO: Change 'account' link in header to view own profile
+TODO: Profile search? Maybe not though...
+TODO: Share poll buttons
+TODO: Email notifications (follows, and votes)
+TODO: Make email notifications subscribable (add to account_settings)
+TODO: Display time posted for polls, both on poll view page and on view_recent/index
+TODO:  |- Use user's timezone (django app configured to UTC)
+
+TODO: Write tests for recent polls and explore polls
