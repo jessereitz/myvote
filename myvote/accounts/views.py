@@ -12,7 +12,7 @@ from .models import FollowedUsers
 # TODO: Profile search? Maybe not though...
 # TODO: Share poll buttons
 # TODO: Email notifications (follows, and votes)
-# TODO: Make email notifications subscribable (add to account_overview)
+# TODO: Make email notifications subscribable (add to account_settings)
 
 def signup(request):
     if request.method == 'POST':
@@ -31,7 +31,7 @@ def follow_user(request, user_id):
     if request.method == 'POST':
         next_url = request.POST.get('next') or 'home'
         if request.user.id == user_id:
-            messages.error(request, "You cannot follow yourself.")
+            messages.warning(request, "You cannot follow yourself.")
             return redirect(next_url)
         try:
             followed_user = User.objects.get(pk=user_id)
@@ -47,9 +47,11 @@ def follow_user(request, user_id):
     return redirect('home')
 
 @login_required
-def account_overview(request):
+def account_settings(request):
     if request.user.is_authenticated:
-        return render(request, 'accounts/account_overview.html')
+        return render(request, 'accounts/account_settings.html')
+
+
 
 @login_required
 def change_password(request):

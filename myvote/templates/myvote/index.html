@@ -23,8 +23,9 @@
       </p>
     {% endif %}
 
-    {% if followed_users %}
+    {% if followed_users != None %}
     <div class="text-center">
+      {% if followed_user.objects.first.polls %}
       <h2>People you follow</h2>
       {% for user in followed_users %}
         {% for poll in user.followed.polls.all %}
@@ -40,6 +41,7 @@
         {% endfor %}
         <br />
       {% endfor %}
+      {% endif %}
     </div>
     {% endif %}
 

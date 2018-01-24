@@ -14,8 +14,8 @@ def index(request):
         followed_users = request.user.followed.all()
     else:
         polls = None
+        followed_users = None
     return render(request, 'myvote/index.html', {'polls': polls, 'followed_users': followed_users})
-
 
 @login_required
 def create_poll(request):
