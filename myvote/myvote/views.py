@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator
 
 from .models import Poll, Option, Vote
 from .forms import PollCreationForm, PollDeletionForm
@@ -16,12 +17,29 @@ def index(request):
     else:
         polls = None
         followed_users = None
+        followed_polls = None
     return render(request, 'myvote/index.html', {'polls': polls, 'followed_polls': followed_polls})
 
 
 @login_required
 def view_recent_polls(request):
-    return redirect('home')    
+    page_title = "Recent Polls in Your Network"
+    followed_users = request.user.followed.values_list('followed_id')
+    poll_list = Poll.objects.filter(owner_id__in=followed_users).order_by('-datetime')
+
+    paginator = Paginator(poll_list, 10)
+    page = request.GET.get('page')
+    polls = paginator.get_page(page)
+    return render(request, 'myvote/recent_polls.html', {'page_title': page_title,'polls': polls})
+
+@login_required
+def explore_polls(request):
+    page_title = "Explore Polls"
+    poll_list = Poll.objects.all()
+    paginator = Paginator(poll_list, 10)
+    page = request.GET.get('page')
+    polls = paginator.get_page(page)
+    return render(request, 'myvote/recent_polls.html', {'page_title': page_title, 'polls': polls})
 
 @login_required
 def create_poll(request):

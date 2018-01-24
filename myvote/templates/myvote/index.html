@@ -30,6 +30,7 @@
         <table class="">
           <tr><th colspan="2">{{ poll.name }}</th></tr>
           <tr><th>Owner:</th><td>{{ poll.owner }}</td></tr>
+          <!-- <tr><th>Posted:</th><td>{{ poll.datetime }}</td></tr> -->
           <tr>
             <td colspan="2" class="text-center">
               <a href="{% url 'view poll' poll_id=poll.id %}">Check it out!</a>

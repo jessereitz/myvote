@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+  <h1 class="text-center">{{ page_title }}</h1>
+    <div class="text-center block_center" style="max-width: 70vw;">
+    {% for poll in polls %}
+    <table class="">
+      <tr><th colspan="2">{{ poll.name }}</th></tr>
+      <tr><th>Owner:</th><td>{{ poll.owner }}</td></tr>
+      <!-- <tr><th>Posted:</th><td>{{ poll.datetime }}</td></tr> -->
+      <tr>
+        <td colspan="2" class="text-center">
+          <a href="{% url 'view poll' poll_id=poll.id %}">Check it out!</a>
+        </td>
+      </tr>
+    </table>
+    {% endfor %}
+  </div>
+  <div class="pagination block_center text-center">
+    {% if polls.has_previous %}
+      <a href="?page={{ polls.previous_page_number }}">previous</a>
+    {% endif %}
+
+    <span class="current">
+      Page {{ polls.number }} of {{ polls.paginator.num_pages }}
+    </span>
+
+    {% if polls.has_next %}
+      <a href="?page={{ polls.next_page_number }}">next</a>
+    {% endif %}
+  </div>
+{% endblock %}
