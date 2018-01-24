@@ -11,13 +11,12 @@ def index(request):
     """ Renders homepage/index view. """
     if request.user.is_authenticated:
         polls = Poll.objects.filter(owner=request.user)
-        followed_users = request.user.followed.all()
-        print("\n\n\nFOLLOWED")
-        print(followed_users)
+        followed_users = request.user.followed.values_list('followed_id')
+        followed_polls = Poll.objects.filter(owner_id__in=followed_users).order_by('-datetime')[:10]
     else:
         polls = None
         followed_users = None
-    return render(request, 'myvote/index.html', {'polls': polls, 'followed_users': followed_users})
+    return render(request, 'myvote/index.html', {'polls': polls, 'followed_polls': followed_polls})
 
 @login_required
 def create_poll(request):

@@ -23,13 +23,11 @@
       </p>
     {% endif %}
 
-    {% if followed_users != None %}
+    {% if followed_polls %}
     <div class="text-center">
-      {% if followed_users.first %}
-      <h2>Polls in Your Network</h2>
-      {% for user in followed_users %}
-        {% for poll in user.followed.polls.all %}
-        <table>
+      <h2>Recent Polls in Your Network</h2>
+      {% for poll in followed_polls %}
+        <table class="">
           <tr><th colspan="2">{{ poll.name }}</th></tr>
           <tr><th>Owner:</th><td>{{ poll.owner }}</td></tr>
           <tr>
@@ -38,10 +36,10 @@
             </td>
           </tr>
         </table>
-        {% endfor %}
-        <br />
       {% endfor %}
-      {% endif %}
+      <br />
+      <br />
+      <a href="#" class="inline-block_center">View more recent polls -></a>
     </div>
     {% endif %}
 
