@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}View {{ view_user.username }}'s Profile{% endblock %}
+
+{% block content %}
+  <h1 class="text-center">{{ view_user.username }}</h1>
+  <div class="text-center">
+    {% if view_user != user %}
+      {% if not followed %}
+        <form method="POST" action="{% url 'account:follow user' user_id=view_user.id %}" class="block_center">
+          {% csrf_token %}
+          <input type="hidden" name="next_url" value="{% url 'account:view profile' user_id=view_user.id %}">
+          <input type="submit" value="Follow">
+        </form>
+      {% else %}
+        <form method="POST" action="#" class="block_center">
+          {% csrf_token %}
+          <input type="hidden" name="next_url" value="{% url 'account:view profile' user_id=view_user.id %}">
+          <input type="submit" value="Unfollow">
+        </form>
+      {% endif %}
+    {% endif %}
+
+    <h2>Polls</h2>
+    {% if view_user.polls.all %}
+      {% for poll in view_user.polls.all %}
+        {% include "modules/poll_viewer.html" %}
+      {% endfor %}
+    {% else %}
+        <p class="block_center">This user hasn't added any polls yet!</p>
+    {% endif %}
+  </div>
+{% endblock %}

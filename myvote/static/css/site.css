@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans|Raleway');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700|Raleway');
 
 body, html {
   margin: 0;
@@ -7,7 +7,7 @@ body, html {
   color: #333;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6, th {
   font-family: 'Open Sans', sans-serif;
 }
 
@@ -162,10 +162,9 @@ form input[type="submit"], form input[type="button"] {
   width: auto;
   display: inline-block;
   border-radius: 5px;
-  border: none;
+  border: 1px solid #ddd;
   transition: transform 0.2s, box-shadow 0.2s;
   padding-bottom: 0.5em;
-
 }
 
 form input[type="submit"]:hover,
@@ -285,6 +284,10 @@ table tr:hover {
 
 .more-top-margin {
   margin-top: 1em;
+}
+
+.bold {
+  font-weight: bold;
 }
 
 a.link_button {

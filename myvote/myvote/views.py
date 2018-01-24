@@ -12,6 +12,8 @@ def index(request):
     if request.user.is_authenticated:
         polls = Poll.objects.filter(owner=request.user)
         followed_users = request.user.followed.all()
+        print("\n\n\nFOLLOWED")
+        print(followed_users)
     else:
         polls = None
         followed_users = None

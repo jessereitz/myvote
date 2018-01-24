@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login as auth_login
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -29,7 +29,10 @@ def signup(request):
 @login_required
 def follow_user(request, user_id):
     if request.method == 'POST':
-        next_url = request.POST.get('next') or 'home'
+        print('\n\n\n')
+        print(request.POST.get('next_url'))
+        next_url = request.POST.get('next_url') or 'home'
+        print(next_url)
         if request.user.id == user_id:
             messages.warning(request, "You cannot follow yourself.")
             return redirect(next_url)
@@ -48,14 +51,34 @@ def follow_user(request, user_id):
 
 @login_required
 def account_settings(request):
+    """
+        Display the settings page.
+    """
     if request.user.is_authenticated:
         return render(request, 'accounts/account_settings.html')
 
-
+def account_view_profile(request, user_id):
+    """
+        Display the profile page for a user. Includes username, recent polls.
+    """
+    if not user_id:
+        return redirect('home')
+    else:
+        try:
+            relationship = request.user.followed.filter(followed_id=user_id).first()
+            view_user = relationship.followed
+            followed = True
+        except Exception as e:
+            view_user = get_object_or_404(User, pk=user_id)
+            followed = False
+        return render(request, 'accounts/view_profile.html', {'view_user': view_user, 'followed': followed})
+    return redirect('home')
 
 @login_required
 def change_password(request):
     if request.method == 'GET':
+        # This has to manually be set to None because of the way the form
+        # clean method works.
         request.POST = None
     form = ChangePasswordForm(data=request.POST, user=request.user)
     if request.method == 'POST':
@@ -70,6 +93,8 @@ def change_password(request):
 @login_required
 def change_email(request):
     if request.method == 'GET':
+        # This has to manually be set to None because of the way the form
+        # clean method works.
         request.POST = None
 
     form = ChangeEmailForm(data=request.POST, user=request.user)
@@ -84,6 +109,8 @@ def change_email(request):
 @login_required
 def delete_account(request):
     if request.method == 'GET':
+        # This has to manually be set to None because of the way the form
+        # clean method works.
         request.POST = None
 
     form = DeleteAccountForm(data=request.POST, user=request.user)

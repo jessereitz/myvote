@@ -3,7 +3,8 @@
 {% block title %}View Poll: {{ poll.name }}{% endblock %}
 
 {% block content %}
-<h1 class="text-center">View Poll: <i>{{ poll.name }}</i></h1>
+<h1 class="text-center">{{ poll.name }}</h1>
+<h2 class="text-center"><a href="{% url 'account:view profile' user_id=poll.owner.id %}">{{ poll.owner.username }}</a></h2>
 {% if user_has_voted %}
   <p class="block_center text-center">You have already voted on this poll</p>
 {% endif %}
