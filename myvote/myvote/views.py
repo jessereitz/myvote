@@ -13,7 +13,11 @@ def index(request):
     # TODO: AJAX load more polls at end of page
     if request.user.is_authenticated:
         followed_users = request.user.followed.values_list('followed_id')
-        followed_polls = Poll.objects.filter(owner_id__in=followed_users).order_by('-datetime')[:10]
+        followed_poll_list = Poll.objects.filter(owner_id__in=followed_users).order_by('-datetime')
+
+        paginator = Paginator(followed_poll_list, 5)
+        page = request.GET.get('page')
+        followed_polls = paginator.get_page(page)
     else:
         followed_users = None
         followed_polls = None
