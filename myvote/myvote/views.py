@@ -31,7 +31,7 @@ def view_recent_polls(request):
     polls = paginator.get_page(page)
     return render(request, 'myvote/recent_polls.html', {'page_title': page_title,'polls': polls})
 
-@login_required
+
 def explore_polls(request):
     page_title = "Explore Polls"
     poll_list = Poll.objects.all()
@@ -68,7 +68,7 @@ def create_poll(request):
 def view_poll(request, poll_id):
     # TODO: implement F() to protect against race conditions
     poll = get_object_or_404(Poll, pk=poll_id)
-    if poll.user_has_voted(request.user):
+    if request.user.is_anonymous or poll.user_has_voted(request.user):
         user_has_voted = True
     else:
         user_has_voted = False
