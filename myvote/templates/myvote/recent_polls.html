@@ -11,10 +11,10 @@
       {% include "modules/poll_stream_item.html" %}
     {% endfor %}
   </div>
-  
+
   <div class="pagination block_center text-center">
     {% if polls.has_previous %}
-      <a href="?page={{ polls.previous_page_number }}">previous</a>
+      <a href="?page={{ polls.previous_page_number }}">&lt;- previous</a>
     {% endif %}
 
     <span class="current">
@@ -22,7 +22,7 @@
     </span>
 
     {% if polls.has_next %}
-      <a href="?page={{ polls.next_page_number }}">next</a>
+      <a href="?page={{ polls.next_page_number }}">next -&gt;</a>
     {% endif %}
   </div>
 {% endblock %}
