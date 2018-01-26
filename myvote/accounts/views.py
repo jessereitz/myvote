@@ -71,16 +71,24 @@ def account_view_profile(request, user_id):
         return redirect('home')
     else:
         if request.user.is_authenticated:
-            try:
-                relationship = request.user.followed.filter(followed_id=user_id).first()
-                view_user = relationship.followed
-                followed = True
-            except Exception as e:
-                view_user = get_object_or_404(User, pk=user_id)
-                followed = False
+            if request.user.id == user_id:
+                print('\n\n\nEYYYY')
+                view_user = request.user
+                followed = "Self"
+            else:
+                try:
+                    relationship = request.user.followed.filter(followed_id=user_id).first()
+                    view_user = relationship.followed
+                    followed = True
+                except Exception as e:
+                    view_user = get_object_or_404(User, pk=user_id)
+                    followed = False
         else:
             view_user = get_object_or_404(User, pk=user_id)
             followed = None
+
+        print(view_user)
+        print(followed)
         return render(request, 'accounts/view_profile.html', {'view_user': view_user, 'followed': followed})
     return redirect('home')
 

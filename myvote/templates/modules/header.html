@@ -6,7 +6,7 @@
     <a href="{% url 'explore polls' %}">explore</a>
     {% if user.is_authenticated %}
       <a href="{% url 'create poll' %}">create</a>
-      <a href="{% url 'account:overview' %}">account</a>
+      <a href="{% url 'account:view profile' user_id=user.id %}">my profile</a>
       <a href="{% url 'account:logout' %}">logout</a>
     {% else %}
       <a href="{% url 'account:signup' %}">sign up</a>
