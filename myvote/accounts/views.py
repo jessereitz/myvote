@@ -72,7 +72,6 @@ def account_view_profile(request, user_id):
     else:
         if request.user.is_authenticated:
             if request.user.id == user_id:
-                print('\n\n\nEYYYY')
                 view_user = request.user
                 followed = "Self"
             else:
