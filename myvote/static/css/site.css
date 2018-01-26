@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700|Raleway');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700|Raleway:400,700');
 
 body, html {
   margin: 0;
@@ -25,7 +25,7 @@ p {
 }
 
 /* LAYOUT */
-header {
+header.main {
   display: block;
   position: relative;
   height: 70px;
@@ -33,12 +33,12 @@ header {
   box-shadow: 2px 2px 2px 2px rgba(0,0,0,0.1);
 }
 
-header h1 {
+header.main h1 {
   display: inline-block;
   color: #000;
 }
 
-header nav {
+header.main nav {
   padding: 0;
   display: inline-block;
   position: absolute;
@@ -46,7 +46,7 @@ header nav {
   height: 100%;
 }
 
-header nav a {
+header.main nav a {
   box-sizing: border-box;
   display: inline-block;
   margin: 0;
@@ -56,12 +56,12 @@ header nav a {
   transition: background 0.2s;
 }
 
-header nav a:hover {
+header.main nav a:hover {
   background: #eee;
   text-decoration: none !important;
 }
 
-header nav a.current_page {
+header.main nav a.current_page {
   border-bottom: 2px solid #888;
 }
 
@@ -197,6 +197,90 @@ div.poll_viewer {
 
 div.poll_viewer:hover {
   box-shadow: 3px 3px 5px 2px rgba(0,0,0,0.1);
+}
+
+
+
+div.poll_stream {
+  max-width: 50vw;
+  transition: max-width 0.2s;
+}
+
+@media screen and (max-width: 850px) {
+  div.poll_stream {
+    max-width: 90vw;
+  }
+}
+
+div.ps_item {
+  border: 1px solid #ddd;
+  margin: 1em 0;
+  /* padding: 0.25em; */
+  box-shadow: 2px 2px 2px 1px rgba(0,0,0,0.03);
+  text-align: left;
+  overflow: hidden;
+}
+
+header.ps_item_header {
+  position: relative;
+  text-align: left;
+  margin-bottom: 0.5em;
+  background: #eee;
+  padding: 0.5em;
+  box-shadow: 2px 2px 2px 2px rgba(0,0,0,0.075);
+}
+
+header.ps_item_header a {
+  color: inherit;
+}
+
+span.ps_item_header_timestamp {
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+}
+
+section.ps_item_content {
+  box-sizing: border-box;
+  padding: 0.25em 0.5em;
+  width: 100%;
+}
+
+section.ps_item_content h3 {
+  display: inline-block;
+  width: 33%;
+  text-align: center;
+  vertical-align: middle;
+}
+
+section.ps_item_content h3 a {
+  color: inherit;
+}
+
+section.ps_item_content p {
+  display: inline-block;
+  width: 62%;
+  text-align: center;
+  vertical-align: middle;
+}
+
+
+@media screen and (max-width: 550px) {
+  section.ps_item_content h3 {
+    display: block;
+    width: 90%;
+    margin: 1em auto;
+  }
+
+  section.ps_item_content p {
+    display: block;
+    width: 90%;
+    margin: 1em auto;
+  }
+}
+
+section.ps_item_content hr {
+  border: 1px solid #efefef;
 }
 
 /* ACCOUNT ADMIN */

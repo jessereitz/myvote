@@ -10,15 +10,14 @@ from .forms import PollCreationForm, PollDeletionForm
 
 def index(request):
     """ Renders homepage/index view. """
+    # TODO: AJAX load more polls at end of page
     if request.user.is_authenticated:
-        polls = Poll.objects.filter(owner=request.user)
         followed_users = request.user.followed.values_list('followed_id')
         followed_polls = Poll.objects.filter(owner_id__in=followed_users).order_by('-datetime')[:10]
     else:
-        polls = None
         followed_users = None
         followed_polls = None
-    return render(request, 'myvote/index.html', {'polls': polls, 'followed_polls': followed_polls})
+    return render(request, 'myvote/index.html', {'followed_polls': followed_polls})
 
 
 @login_required

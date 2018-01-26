@@ -1,0 +1,23 @@
+<div class="ps_item">
+  <header class="ps_item_header">
+    <strong>
+      <a href="{% url 'account:view profile' user_id=poll.owner.id %}">{{ poll.owner }}</a>
+    </strong> created a new poll.
+    <span class="ps_item_header_timestamp">
+      {{ poll.datetime|date:"SHORT_DATE_FORMAT" }}
+      at
+      {{ poll.datetime|date:"f a" }}
+    </span>
+  </header>
+
+  <section class="ps_item_content">
+    <h3><a href="{% url 'view poll' poll_id=poll.id %}">{{ poll.name }}</a></h3>
+    <p>
+      <i>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore ...</i>
+    </p>
+    <hr />
+    <div class="text-center">
+      <a href="{% url 'view poll' poll_id=poll.id %}">Check it out! -></a>
+    </div>
+  </section>
+</div>

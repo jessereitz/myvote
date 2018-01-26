@@ -1,23 +1,17 @@
 {% extends "base.html" %}
+{% load tz %}
 
 {% block title %}{{ page_title }}{% endblock %}
 
 {% block content %}
   <h1 class="text-center">{{ page_title }}</h1>
-    <div class="text-center block_center" style="max-width: 70vw;">
+
+  <div class="block_center text-center poll_stream">
     {% for poll in polls %}
-    <table class="">
-      <tr><th colspan="2">{{ poll.name }}</th></tr>
-      <tr><th>Owner:</th><td>{{ poll.owner }}</td></tr>
-      <!-- <tr><th>Posted:</th><td>{{ poll.datetime }}</td></tr> -->
-      <tr>
-        <td colspan="2" class="text-center">
-          <a href="{% url 'view poll' poll_id=poll.id %}">Check it out!</a>
-        </td>
-      </tr>
-    </table>
+      {% include "modules/poll_stream_item.html" %}
     {% endfor %}
   </div>
+  
   <div class="pagination block_center text-center">
     {% if polls.has_previous %}
       <a href="?page={{ polls.previous_page_number }}">previous</a>

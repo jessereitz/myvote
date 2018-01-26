@@ -7,42 +7,16 @@
 
 
   {% if user.is_authenticated %}
-    <h1>Welcome, {{ user.username }}</h1>
-    {% if polls %}
-      <h2 class="text-center">Your Polls</h2>
-      <div class="text-center poll_viewer_container">
-      {% for poll in polls %}
-        {% include "modules/poll_viewer.html" %}
-      {% endfor %}
-      </div>
-    {% else %}
-      <h2 class="text-center">You don't have any polls!</h2>
-      <p class="block_center">
-        Why don't you <a href="{% url 'create poll' %}">create your first poll</a>
-        so you can share it with your friends?
-      </p>
-    {% endif %}
 
     {% if followed_polls %}
-    <div class="text-center">
-      <h2>Recent Polls in Your Network</h2>
+    <div class="block_center text-center poll_stream">
+      <h2>Your Network</h2>
       {% for poll in followed_polls %}
-        <table class="">
-          <tr><th colspan="2">{{ poll.name }}</th></tr>
-          <tr><th>Owner:</th><td>{{ poll.owner }}</td></tr>
-          <!-- <tr><th>Posted:</th><td>{{ poll.datetime }}</td></tr> -->
-          <tr>
-            <td colspan="2" class="text-center">
-              <a href="{% url 'view poll' poll_id=poll.id %}">Check it out!</a>
-            </td>
-          </tr>
-        </table>
+        {% include "modules/poll_stream_item.html" %}
       {% endfor %}
-      <br />
-      <br />
-      <a href="{% url 'view recent polls' %}" class="inline-block_center">View more recent polls -></a>
     </div>
     {% endif %}
+
 
   {% else %}
     <h1 class="text-center">Welcome to MyVote</h1>
