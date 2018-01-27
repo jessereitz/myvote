@@ -7,12 +7,17 @@ from django.contrib.auth.password_validation import (validate_password,
         NumericPasswordValidator,)
 
 class SignUpForm(UserCreationForm):
-
     email = forms.CharField(max_length=254, required=True, widget=forms.EmailInput())
 
     class Meta:
         model = User
         fields = ('username', 'email', 'password1', 'password2')
+
+class BioForm(forms.Form):
+    BIO_PLACEHOLDER = "Enter your new biography here"
+    bio_text = forms.CharField(label="Biography",
+                               required=False,
+                               widget=forms.Textarea(attrs={'placeholder': BIO_PLACEHOLDER}))
 
 class ChangePasswordForm(forms.Form):
     old_password = forms.CharField(max_length=72, required=True, widget=forms.PasswordInput())

@@ -11,6 +11,11 @@
       <td colspan="2">{{ user.username }}</td>
     </tr>
     <tr>
+      <td>Bio:</td>
+      <td></td>
+      <td><a href="{% url 'account:edit bio' %}">edit</a></td>
+    </tr>
+    <tr>
       <td>Email:</td>
       <td>{{ user.email }}</td>
       <td><a href="{% url 'account:change email' %}">change</a></td>

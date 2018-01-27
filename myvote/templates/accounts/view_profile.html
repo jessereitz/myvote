@@ -24,6 +24,9 @@
       {% else %}
         {{ followed }}
       {% endif %}
+    <p class="block_center text-center">
+        {{ view_user.bio.text }}
+    </p>
     {% if view_user.polls.all %}
       <div class="block_center text-center poll_stream">
         {% for poll in view_user.polls.all %}

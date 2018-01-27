@@ -1,11 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 from django.contrib.auth import login as auth_login
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
-from .forms import SignUpForm, ChangePasswordForm, ChangeEmailForm, DeleteAccountForm
-from .models import FollowedUsers
+from .forms import (SignUpForm, ChangePasswordForm,
+                    ChangeEmailForm, DeleteAccountForm,
+                    BioForm)
+from .models import FollowedUsers, UserBio
 
 def signup(request):
     if request.method == 'POST':
@@ -85,11 +88,31 @@ def account_view_profile(request, user_id):
         else:
             view_user = get_object_or_404(User, pk=user_id)
             followed = None
-
-        print(view_user)
-        print(followed)
         return render(request, 'accounts/view_profile.html', {'view_user': view_user, 'followed': followed})
     return redirect('home')
+
+@login_required
+def edit_bio(request):
+    """
+        Allows users to update their bio. User must be logged in. Automatically
+        updates the current authenticated user.
+    """
+    if request.method == 'POST':
+        form = BioForm(request.POST)
+        if form.is_valid():
+            bio_text = form.cleaned_data['bio_text']
+            # Try to update the user's bio first. Otherwise create a new one
+            try:
+                request.user.bio.text = bio_text
+                request.user.bio.save()
+            except AttributeError:
+                bio = UserBio(user=request.user, text=bio_text)
+                bio.save()
+            return redirect(reverse('account:view profile', args=(request.user.id,)))
+    else:
+        form = BioForm()
+    return render(request, 'accounts/edit_bio.html', {'form': form})
+
 
 @login_required
 def change_password(request):
