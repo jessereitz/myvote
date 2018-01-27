@@ -1,4 +1,4 @@
-TODO: Add description to polls
+TODO: Recent poll sorting in user's profiles (should sort descending)
 TODO: Add bio to user profiles
 TODO: Profile search? Maybe not though...
 TODO: Share poll buttons (facebook, twitter)
