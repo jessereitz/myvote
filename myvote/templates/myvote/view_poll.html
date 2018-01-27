@@ -4,10 +4,16 @@
 
 {% block content %}
 <h1 class="text-center">{{ poll.name }}</h1>
-<h2 class="text-center"><a href="{% url 'account:view profile' user_id=poll.owner.id %}">{{ poll.owner.username }}</a></h2>
-{% if user_has_voted %}
-  <p class="block_center text-center">You have already voted on this poll</p>
-{% endif %}
+<div class="block_center text-center">
+  by <a href="{% url 'account:view profile' user_id=poll.owner.id %}">{{ poll.owner.username }}</a>
+</div>
+<p class="block_center text-center">
+  {% if poll.description %}
+    {{ poll.description }}
+  {% else %}
+    This poll has no description.
+  {% endif %}
+</p>
 <div class="text-center">
   <table class="inline-block_center text-center">
     <tr><th>Option</th><th>Votes</th><th></th></tr>
@@ -23,6 +29,9 @@
     </tr>
     {% endfor %}
   </table>
+  {% if user_has_voted %}
+    <p class="block_center text-center">You have already voted on this poll</p>
+  {% endif %}
   {% if user == poll.owner %}
   <div class="text-center more-top-margin">
     <a href="{% url 'delete poll' poll_id=poll.id %}?cancel={% url 'view poll' poll_id=poll.id %}" class="link_button red-background">Delete this poll</a>
