@@ -10,7 +10,7 @@ from .forms import PollCreationForm, PollDeletionForm
 
 def index(request):
     """ Renders homepage/index view. """
-    # TODO: AJAX load more polls at end of page
+    # TODO: AJAX load more polls at end of page?
     if request.user.is_authenticated:
         followed_users = request.user.followed.values_list('followed_id')
         followed_poll_list = Poll.objects.filter(owner_id__in=followed_users).order_by('-datetime')
@@ -50,7 +50,10 @@ def create_poll(request):
         form = PollCreationForm(request.POST)
         if form.is_valid():
             poll_name = form.cleaned_data['name']
-            poll = Poll(name=poll_name, owner=request.user)
+            poll_description = form.cleaned_data['description']
+            poll = Poll(name=poll_name,
+                        description=poll_description,
+                        owner=request.user)
             poll.save()
 
             option1_text = form.cleaned_data['option1']
