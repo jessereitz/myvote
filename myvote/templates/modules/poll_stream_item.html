@@ -13,7 +13,12 @@
   <section class="ps_item_content">
     <h3><a href="{% url 'view poll' poll_id=poll.id %}">{{ poll.name }}</a></h3>
     <p>
-      <i>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore ...</i>
+      {% if poll.description %}
+        <i>{{ poll.description }}</i>
+      {% else %}
+        <i>This poll has no description.</i>
+      {% endif %}
+      <!-- <i>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore ...</i> -->
     </p>
     <hr />
     <div class="text-center">
