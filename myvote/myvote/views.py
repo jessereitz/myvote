@@ -113,7 +113,12 @@ def delete_poll(request, poll_id):
         else:
             # if current user is poll owner and submits get request, display delete form
             form = PollDeletionForm()
-            return render(request, 'myvote/delete_poll.html', {'poll': poll, 'form': form})
+            cancel_url = request.GET.get('cancel')
+            return render(request,
+                          'myvote/delete_poll.html',
+                          {'poll': poll,
+                          'form': form,
+                          'cancel_url': cancel_url })
     else:
         # if current user is NOT poll owner, redirect home
         messages.add_message(request, messages.ERROR, "You do not have permission to delete that poll")

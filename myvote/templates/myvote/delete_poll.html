@@ -10,7 +10,7 @@
     <i>This action can't be undone.</i>
     <div class="text-center">
       <input type="submit" value="DELETE" class="red-background">
-      <a href="{% url 'home' %}" class="link_button">Cancel</a>
+      <a href="{{ cancel_url }}" class="link_button">Cancel</a>
     </div>
   </form>
 {% endblock %}

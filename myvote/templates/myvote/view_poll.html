@@ -17,13 +17,15 @@
       <td>{{ option.votes.count }}</td>
       {% if not user_has_voted %}
       <td><a href="{% url 'vote poll' poll_id=poll.id option_id=option.id %}">Vote</a></td>
+      {% else %}
+      <td></td>
       {% endif %}
     </tr>
     {% endfor %}
   </table>
   {% if user == poll.owner %}
   <div class="text-center more-top-margin">
-    <a href="{% url 'delete poll' poll_id=poll.id %}" class="link_button red-background">Delete this poll</a>
+    <a href="{% url 'delete poll' poll_id=poll.id %}?cancel={% url 'view poll' poll_id=poll.id %}" class="link_button red-background">Delete this poll</a>
   </div>
   {% endif %}
 </div>
