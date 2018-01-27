@@ -6,6 +6,7 @@ class Poll(models.Model):
     name = models.CharField(max_length=100)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='polls')
     datetime = models.DateTimeField(auto_now_add=True)
+    description = models.TextField()
 
     def __str__(self):
         return self.name
