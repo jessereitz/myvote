@@ -1,13 +1,9 @@
 {% extends "base.html" %}
 
 {% block title %}Home{% endblock %}
-{% block homeactive %}current_page{% endblock %}
 
 {% block content %}
-
-
   {% if user.is_authenticated %}
-
     {% if followed_polls %}
     <div class="block_center text-center poll_stream">
       <h2>Your Network</h2>
@@ -15,29 +11,9 @@
         {% include "modules/poll_stream_item.html" %}
       {% endfor %}
 
-      <div class="pagination block_center text-center">
-        <div class="previous-ctn">
-          {% if followed_polls.has_previous %}
-            <a href="?page={{ followed_polls.previous_page_number }}" id="previous-page-button" class="link_button">
-              newer
-            </a>
-          {% endif %}
-        </div>
-
-        <div class="next-ctn">
-          {% if followed_polls.has_next %}
-            <a href="?page={{ followed_polls.next_page_number }}" id="next-page-button" class="link_button">
-              older
-            </a>
-          {% endif %}
-        </div>
-      </div>
+      {% include 'modules/pagination_navigation.html' with list=followed_polls %}
     </div>
-
-
     {% endif %}
-
-
   {% else %}
     <h1 class="text-center">Welcome to MyVote</h1>
     <p class="block_center">

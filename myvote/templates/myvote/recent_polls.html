@@ -10,19 +10,8 @@
     {% for poll in polls %}
       {% include "modules/poll_stream_item.html" %}
     {% endfor %}
-  </div>
 
-  <div class="pagination block_center text-center">
-    {% if polls.has_previous %}
-      <a href="?page={{ polls.previous_page_number }}">&lt;- previous</a>
-    {% endif %}
+    {% include "modules/pagination_navigation.html" with list=polls %}
 
-    <span class="current">
-      Page {{ polls.number }} of {{ polls.paginator.num_pages }}
-    </span>
-
-    {% if polls.has_next %}
-      <a href="?page={{ polls.next_page_number }}">next -&gt;</a>
-    {% endif %}
   </div>
 {% endblock %}

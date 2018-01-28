@@ -1,0 +1,17 @@
+<div class="pagination block_center text-center">
+  <div class="previous-ctn">
+    {% if list.has_previous %}
+      <a href="?page={{ list.previous_page_number }}" id="previous-page-button" class="link_button">
+        newer
+      </a>
+    {% endif %}
+  </div>
+
+  <div class="next-ctn">
+    {% if list.has_next %}
+      <a href="?page={{ list.next_page_number }}" id="next-page-button" class="link_button">
+        older
+      </a>
+    {% endif %}
+  </div>
+</div>
