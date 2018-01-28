@@ -21,48 +21,47 @@ def index(request):
     else:
         followed_users = None
         followed_polls = None
-    return render(request, 'myvote/index.html', {'followed_polls': followed_polls})
-
-
-@login_required
-def view_recent_polls(request):
-    page_title = "Recent Polls in Your Network"
-    followed_users = request.user.followed.values_list('followed_id')
-    poll_list = Poll.objects.filter(owner_id__in=followed_users).order_by('-datetime')
-
-    paginator = Paginator(poll_list, 10)
-    page = request.GET.get('page')
-    polls = paginator.get_page(page)
-    return render(request, 'myvote/recent_polls.html', {'page_title': page_title,'polls': polls})
-
+    return render(request, 'myvote/index.html',
+                  {'followed_polls': followed_polls})
 
 def explore_polls(request):
     """
-        Allows users to explore and find polls.
-        "/explore"  -defaults to recent
-        "/explore/user_id" - recent polls from user
+        Allows users to explore and find polls. As of now explore simply
+        displays all polls in system, ordered by datetime added descending.
+        Produces two values for use in template: 'page_title', and 'polls'.
 
-        Display the profile page for a user. Includes username, recent polls.
-        MUST be passed a user_id (otherwise it redirects). If not redirected,
-        this method produces a 'view_user', a 'followed' enumeration, and a
-        list of view_user's recent polls, ordered by posted date descending.
-
-        Return values:
-            -  view_user = a User object. Can be the authenticated user.
-            -  followed = an enumeration with 4 possible values:
-                            - None (request.user is not authenticated)
-                            - 'Self' (request.user is viewing own profile)
-                            - True (request.user is already following view_user)
-                            - False (request.user is NOT following view_user)
-            -  poll_list = a query_set of Poll objects, ordered by posted date
-                           descending.
+        Template values:
+            -  page_title = a String representing the title of the page.
+            -  polls = a query_set of Poll objects, ordered by posted datetime
+                       descending.
     """
     page_title = "Explore Polls"
-    poll_list = Poll.objects.all()
+    poll_list = Poll.objects.all().order_by('-datetime')
     paginator = Paginator(poll_list, 10)
     page = request.GET.get('page')
     polls = paginator.get_page(page)
-    return render(request, 'myvote/recent_polls.html', {'page_title': page_title, 'polls': polls})
+    return render(request, 'myvote/recent_polls.html',
+                  {'page_title': page_title, 'polls': polls})
+
+
+def explore_recent_polls(request, user_id):
+    """
+        Allows users to view all recent polls from a given user. Produces two
+        values for use in template: 'page_title', and 'polls'.
+
+        Template values:
+            -  page_title = a String representing the title of the page.
+            -  polls = a query_set of Poll objects, ordered by posted datetime
+                       descending.
+    """
+    view_user = User.objects.get(pk=user_id)
+    page_title = view_user.username + "'s Recent Polls"
+    poll_list = view_user.polls.order_by('-datetime')
+    paginator = Paginator(poll_list, 10)
+    page = request.GET.get('page')
+    polls = paginator.get_page(page)
+    return render(request, 'myvote/recent_polls.html',
+                  {'page_title': page_title, 'polls': polls})
 
 @login_required
 def create_poll(request):
@@ -99,7 +98,8 @@ def view_poll(request, poll_id):
         user_has_voted = True
     else:
         user_has_voted = False
-    return render(request, 'myvote/view_poll.html', {'poll': poll, 'user_has_voted': user_has_voted})
+    return render(request, 'myvote/view_poll.html',
+                  {'poll': poll, 'user_has_voted': user_has_voted})
 
 @login_required
 def vote_poll(request, poll_id, option_id):
@@ -143,3 +143,10 @@ def delete_poll(request, poll_id):
         # if current user is NOT poll owner, redirect home
         messages.add_message(request, messages.ERROR, "You do not have permission to delete that poll")
         return redirect(reverse('home'))
+
+
+# HELPERS #
+def get_recent_polls(user_id):
+    """
+        Helper function that gets recent polls
+    """

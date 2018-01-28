@@ -21,7 +21,7 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='home'),
-    path('view_recent/', views.view_recent_polls, name='view recent polls'),
+    path('explore/recent/<int:user_id>', views.explore_recent_polls, name='explore recent polls'),
     path('explore/', views.explore_polls, name='explore polls'),
     path('create_poll/', views.create_poll, name='create poll'),
     path('vote_poll/<int:poll_id>/<int:option_id>', views.vote_poll, name='vote poll'),
