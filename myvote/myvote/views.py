@@ -37,6 +37,26 @@ def view_recent_polls(request):
 
 
 def explore_polls(request):
+    """
+        Allows users to explore and find polls.
+        "/explore"  -defaults to recent
+        "/explore/user_id" - recent polls from user
+
+        Display the profile page for a user. Includes username, recent polls.
+        MUST be passed a user_id (otherwise it redirects). If not redirected,
+        this method produces a 'view_user', a 'followed' enumeration, and a
+        list of view_user's recent polls, ordered by posted date descending.
+
+        Return values:
+            -  view_user = a User object. Can be the authenticated user.
+            -  followed = an enumeration with 4 possible values:
+                            - None (request.user is not authenticated)
+                            - 'Self' (request.user is viewing own profile)
+                            - True (request.user is already following view_user)
+                            - False (request.user is NOT following view_user)
+            -  poll_list = a query_set of Poll objects, ordered by posted date
+                           descending.
+    """
     page_title = "Explore Polls"
     poll_list = Poll.objects.all()
     paginator = Paginator(poll_list, 10)
