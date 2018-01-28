@@ -1,6 +1,7 @@
 TODO: Recent poll sorting in user's profiles (should sort descending)
-TODO: Add bio to user profiles
 TODO: Profile search? Maybe not though...
+TODO: Restyle profile view
+TODO: Restyle poll view
 TODO: Share poll buttons (facebook, twitter)
 TODO: Email notifications (follows, and votes)
 TODO: Make email notifications subscribable (add to account_settings)
