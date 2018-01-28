@@ -1,4 +1,5 @@
 TODO: Recent poll sorting in user's profiles (should sort descending)
+TODO: Update index view for new users (if not following anyone, it's currently blank)
 TODO: Profile search? Maybe not though...
 TODO: Restyle profile view
 TODO: Restyle poll view
