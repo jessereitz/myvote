@@ -27,9 +27,9 @@
     <p class="block_center text-center">
         {{ view_user.bio.text }}
     </p>
-    {% if view_user.polls.all %}
+    {% if poll_list %}
       <div class="block_center text-center poll_stream">
-        {% for poll in view_user.polls.all %}
+        {% for poll in poll_list %}
           {% include "modules/poll_stream_item.html" %}
         {% endfor %}
       </div>

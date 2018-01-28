@@ -69,27 +69,43 @@ def account_settings(request):
 def account_view_profile(request, user_id):
     """
         Display the profile page for a user. Includes username, recent polls.
+        MUST be passed a user_id (otherwise it redirects). If not redirected,
+        this method produces a 'view_user', a 'followed' enumeration, and a
+        list of view_user's recent polls, ordered by posted date descending.
+
+        Return values:
+            -  view_user = a User object. Can be the authenticated user.
+            -  followed = an enumeration with 4 possible values:
+                            - None (request.user is not authenticated)
+                            - 'Self' (request.user is viewing own profile)
+                            - True (request.user is already following view_user)
+                            - False (request.user is NOT following view_user)
+            -  poll_list = a query_set of Poll objects, ordered by posted date
+                           descending.
     """
     if not user_id:
         return redirect('home')
     else:
-        if request.user.is_authenticated:
-            if request.user.id == user_id:
-                view_user = request.user
-                followed = "Self"
-            else:
-                try:
-                    relationship = request.user.followed.filter(followed_id=user_id).first()
-                    view_user = relationship.followed
-                    followed = True
-                except Exception as e:
-                    view_user = get_object_or_404(User, pk=user_id)
-                    followed = False
+        # Get view user and set followed
+        if request.user.is_authenticated and request.user.id == user_id:
+            view_user = request.user
+            followed = "Self"
+        elif request.user.is_authenticated:
+            try:
+                view_user = request.user.followed.get(followed_id=user_id).followed
+                followed = True
+            except Exception as e:
+                view_user = get_object_or_404(User, pk=user_id)
+                followed = False
         else:
             view_user = get_object_or_404(User, pk=user_id)
             followed = None
-        return render(request, 'accounts/view_profile.html', {'view_user': view_user, 'followed': followed})
-    return redirect('home')
+
+        poll_list = view_user.polls.order_by('-datetime')[:10]
+
+        return render(request, 'accounts/view_profile.html',
+                      {'view_user': view_user, 'followed': followed,
+                       'poll_list': poll_list})
 
 @login_required
 def edit_bio(request):
