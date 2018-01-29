@@ -4,16 +4,23 @@
 
 {% block content %}
   {% if user.is_authenticated %}
-    {% if followed_polls %}
     <div class="block_center text-center poll_stream">
-      <h2>Your Network</h2>
-      {% for poll in followed_polls %}
-        {% include "modules/poll_stream_item.html" %}
-      {% endfor %}
+      <h2>PollStream</h2>
+      {% if followed_polls %}
+        {% for poll in followed_polls %}
+          {% include "modules/poll_stream_item.html" %}
+        {% endfor %}
 
-      {% include 'modules/pagination_navigation.html' with list=followed_polls %}
+        {% include 'modules/pagination_navigation.html' with list=followed_polls %}
+      {% else %}
+        <p class="block_center">
+          It looks like you don't have any recent polls in your PollStream. Check
+          out the <a href="{% url 'explore polls' %}">Explore page</a> to find
+          some interesting polls by some interesting users!
+        </p>
+      {% endif %}
     </div>
-    {% endif %}
+
   {% else %}
     <h1 class="text-center">Welcome to MyVote</h1>
     <p class="block_center">
