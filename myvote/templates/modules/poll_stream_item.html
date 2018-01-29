@@ -1,13 +1,16 @@
+{% load tz %}
 <div class="ps_item">
   <header class="ps_item_header">
     <strong>
       <a href="{% url 'account:view profile' user_id=poll.owner.id %}">{{ poll.owner }}</a>
     </strong> created a new poll.
+    {% timezone "America/Chicago" %}
     <span class="ps_item_header_timestamp">
       {{ poll.datetime|date:"SHORT_DATE_FORMAT" }}
       at
       {{ poll.datetime|date:"f a" }}
     </span>
+    {% endtimezone %}
   </header>
 
   <section class="ps_item_content">
