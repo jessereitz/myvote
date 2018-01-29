@@ -34,7 +34,6 @@ def create_polls(user, start_num=0, amount=10):
 
     for i in range(start_num, amount + start_num):
         new_name = POLL_NAME + str(i)
-        print(new_name)
         p = Poll(owner=user, name=new_name)
         p.save()
 
