@@ -126,7 +126,7 @@ def edit_bio(request):
                 bio.save()
             return redirect(reverse('account:view profile', args=(request.user.id,)))
     else:
-        form = BioForm()
+        form = BioForm(initial={'bio_text':request.user.bio.text})
     return render(request, 'accounts/edit_bio.html', {'form': form})
 
 
