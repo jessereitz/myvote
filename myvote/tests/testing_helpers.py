@@ -20,20 +20,21 @@ def create_test_user(username=None, password=None):
         password = PASSWORD
     return User.objects.create_user(username=username, password=password)
 
-def create_polls(user, amount=10):
+def create_polls(user, start_num=0, amount=10):
     """
         Populates db with a number of test polls with 2 options. If no amount
         given, defaults to 10. MUST have 'user' supplied.
     """
-    POLL_NAME = "test_poll"
+    POLL_NAME = "test_poll_"
     OPTION_1 = 'option1'
     OPTION_2 = 'option2'
 
     if not user:
         raise Exception("User not provided.")
 
-    for i in range(0, amount):
-        new_name = POLL_NAME + "_" + str(i)
+    for i in range(start_num, amount + start_num):
+        new_name = POLL_NAME + str(i)
+        print(new_name)
         p = Poll(owner=user, name=new_name)
         p.save()
 
