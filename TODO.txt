@@ -1,10 +1,7 @@
-TODO: Recent poll sorting in user's profiles (should sort descending)
-TODO: Update index view for new users (if not following anyone, it's currently blank)
 TODO: Profile search? Maybe not though...
 TODO: Restyle profile view
 TODO: Restyle poll view
 TODO: Share poll buttons (facebook, twitter)
-TODO: Email notifications (follows, and votes)
+TODO: Email notifications (follows, and votes) --> I might add this after deploytin to heroku or something.
 TODO: Make email notifications subscribable (add to account_settings)
-
-TODO: Write tests for recent polls and explore polls
+TODO: Timezone selection
