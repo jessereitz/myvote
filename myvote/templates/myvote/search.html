@@ -6,9 +6,26 @@
 <h1 class="text-center">Search</h1>
 <form method="GET" class="block_center">
   {% csrf_token %}
-  <input class="inline-block_center" type="search" name="search_val" placeholder="Enter your search here...">
+  <input class="inline-block_center" type="search" name="search_val" value="{% if search_val %}{{ search_val }}{% endif %}" placeholder="Enter your search here...">
   <input type="submit" value="search" class="green-background">
-
 </form>
+
+{% if user_search_results %}
+<h2>Users</h2>
+  {% for user in user_search_results %}
+    <div>
+      <a href="{% url 'account:view profile' user_id=user.id %}">{{ user.username }}</a>
+    </div>
+  {% endfor %}
+{% endif %}
+
+{% if poll_search_results %}
+<h2>Polls</h2>
+  {% for poll in poll_search_results %}
+  <div>
+    <a href="{% url 'view poll' poll_id=poll.id %}">{{ poll.name }}</a>
+  </div>
+  {% endfor %}
+{% endif %}
 
 {% endblock %}

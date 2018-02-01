@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.core.mail import send_mail
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 
 from .models import Poll, Option, Vote
 from .forms import PollCreationForm, PollDeletionForm
@@ -66,10 +67,23 @@ def explore_recent_polls(request, user_id):
 
 def search(request):
     search_val = request.GET.get('search_val')
-    print('\n\n\n')
-    print(search_val)
 
-    return render(request, 'myvote/search.html')
+    if search_val:
+        user_search_results = User.objects.filter(username__icontains=search_val)[:10]
+        poll_vector = SearchVector('name', weight='A') + SearchVector('description', weight='B')
+        poll_query = SearchQuery(search_val)
+        poll_search_results = Poll.objects.annotate(rank=SearchRank(poll_vector, poll_query)).filter(rank__gte=0.3).order_by('rank')[:10]
+        print('\n\n\n')
+        print(user_search_results)
+        print(poll_search_results)
+    else:
+        user_search_results = None
+        poll_search_results = None
+
+    return render(request, 'myvote/search.html',
+                  {'user_search_results': user_search_results,
+                   'poll_search_results': poll_search_results,
+                   'search_val': search_val,})
 
 @login_required
 def create_poll(request):
