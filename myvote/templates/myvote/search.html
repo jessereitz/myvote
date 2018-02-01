@@ -4,11 +4,8 @@
 
 {% block content %}
 <h1 class="text-center">Search</h1>
-<form method="GET" class="block_center">
-  {% csrf_token %}
-  <input class="inline-block_center" type="search" name="search_val" value="{% if search_val %}{{ search_val }}{% endif %}" placeholder="Enter your search here...">
-  <input type="submit" value="search" class="green-background">
-</form>
+
+{% include "modules/search_form.html" %}
 
 
 {% if search_val %}
@@ -20,6 +17,7 @@
         <a href="{% url 'account:view profile' user_id=user.id %}">{{ user.username }}</a>
       </div>
     {% endfor %}
+  <a href="{% url 'search users' %}?search_val={{ search_val }}">view all matching users -&gt;</a>
   {% else %}
     <p>No users found matching <i>"{{ search_val }}"</i></p>
   {% endif %}
@@ -31,6 +29,7 @@
       <a href="{% url 'view poll' poll_id=poll.id %}">{{ poll.name }}</a>
     </div>
     {% endfor %}
+  <a href="{% url 'search polls' %}?search_val={{ search_val }}">view all matching polls -&gt;</a>
   {% else %}
   <p>No polls found matching <i>"{{ search_val }}"g</i></p>
   {% endif %}
