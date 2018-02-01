@@ -28,6 +28,9 @@ Search_Generic
 {% block content %}
 
 <h2>Search {{ result_type }}s</h2>
+
+{% include "modules/search_form.html" %}
+
 {% if results %}
   {% for result in results %}
   <div>
