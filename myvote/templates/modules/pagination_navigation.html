@@ -1,16 +1,38 @@
+{% comment %}
+
+  Pagination_Navigation
+
+  This module provides a reusable set of navigation links for paginated views.
+
+  Parameters (passed from parent template):
+  - list (REQUIRED): the paginated list
+  - url_param (optional): an optional parameter appended to the next/prev links url
+  - prev_val (optional): an optional value for the previous button. Defaults to 'newer'
+  - next_val (optional): an optional value for the next button. Defaults to 'older'
+
+{% endcomment %}
+
 <div class="pagination block_center text-center">
   <div class="previous-ctn">
     {% if list.has_previous %}
-      <a href="?page={{ list.previous_page_number }}" id="previous-page-button" class="link_button">
-        newer
+      <a href="?page={{ list.previous_page_number }}{% if url_param %}{{url_param}}{% endif %}" id="previous-page-button" class="link_button">
+        {% if prev_val %}
+          {{ prev_val }}
+        {% else %}
+          newer
+        {% endif %}
       </a>
     {% endif %}
   </div>
 
   <div class="next-ctn">
     {% if list.has_next %}
-      <a href="?page={{ list.next_page_number }}" id="next-page-button" class="link_button">
-        older
+      <a href="?page={{ list.next_page_number }}{% if url_param %}{{url_param}}{% endif %}" id="next-page-button" class="link_button">
+        {% if next_val %}
+          {{ next_val }}
+        {% else %}
+          older
+        {% endif %}
       </a>
     {% endif %}
   </div>
