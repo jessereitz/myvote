@@ -28,6 +28,8 @@ urlpatterns = [
     path('view_poll/<int:poll_id>/', views.view_poll, name='view poll'),
     path('delete_poll/<int:poll_id>/', views.delete_poll, name='delete poll'),
     path('search', views.search, name="search"),
+    path('search/users/', views.search_users, name="search users"),
+    path('search/polls/', views.search_polls, name="search polls"),
 
     path('account/', include('accounts.urls')),
     path('admin/', admin.site.urls),

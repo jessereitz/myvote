@@ -72,7 +72,7 @@ def search(request):
         user_search_results = User.objects.filter(username__icontains=search_val)[:10]
         poll_vector = SearchVector('name', weight='A') + SearchVector('description', weight='B')
         poll_query = SearchQuery(search_val)
-        poll_search_results = Poll.objects.annotate(rank=SearchRank(poll_vector, poll_query)).filter(rank__gte=0.3).order_by('rank')[:10]
+        poll_search_results = Poll.objects.annotate(rank=SearchRank(poll_vector, poll_query)).filter(rank__gte=0.3).order_by('rank')
     else:
         user_search_results = None
         poll_search_results = None
@@ -81,6 +81,41 @@ def search(request):
                   {'user_search_results': user_search_results,
                    'poll_search_results': poll_search_results,
                    'search_val': search_val,})
+
+def search_users(request):
+    search_val = request.GET.get('search_val')
+
+    if search_val:
+        user_search_results_list = User.objects.filter(username__icontains=search_val)
+        paginator = Paginator(user_search_results_list, 10)
+        page = request.GET.get('page')
+        user_search_results = paginator.get_page(page)
+    else:
+        user_search_results = None
+
+    return render(request, 'myvote/search_generic.html',
+                  {'results': user_search_results,
+                   'result_type': 'User',
+                   'search_val': search_val,})
+
+def search_polls(request):
+    search_val = request.GET.get('search_val')
+
+    if search_val:
+        poll_vector = SearchVector('name', weight='A') + SearchVector('description', weight='B')
+        poll_query = SearchQuery(search_val)
+        poll_search_results_list = Poll.objects.annotate(rank=SearchRank(poll_vector, poll_query)).filter(rank__gte=0.3).order_by('rank')
+        paginator = Paginator(poll_search_results_list, 10)
+        page = request.GET.get('page')
+        poll_search_results = paginator.get_page(page)
+    else:
+        poll_search_results = None
+
+    return render(request, 'myvote/search_generic.html',
+                  {'results': poll_search_results,
+                   'result_type': 'Poll',
+                   'search_val': search_val,})
+
 
 @login_required
 def create_poll(request):
