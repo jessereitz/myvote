@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Search{% endblock %}
+
+{% block content %}
+<h1 class="text-center">Search</h1>
+<form method="GET" class="block_center">
+  {% csrf_token %}
+  <input class="inline-block_center" type="search" name="search_val" placeholder="Enter your search here...">
+  <input type="submit" value="search" class="green-background">
+
+</form>
+
+{% endblock %}

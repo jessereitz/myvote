@@ -64,6 +64,13 @@ def explore_recent_polls(request, user_id):
     return render(request, 'myvote/recent_polls.html',
                   {'page_title': page_title, 'polls': polls})
 
+def search(request):
+    search_val = request.GET.get('search_val')
+    print('\n\n\n')
+    print(search_val)
+
+    return render(request, 'myvote/search.html')
+
 @login_required
 def create_poll(request):
     if request.method == 'POST':
