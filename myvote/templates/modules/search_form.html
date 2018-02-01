@@ -1,0 +1,5 @@
+<form method="GET" class="block_center">
+  {% csrf_token %}
+  <input class="inline-block_center" type="search" name="search_val" value="{% if search_val %}{{ search_val }}{% endif %}" placeholder="Enter your search here...">
+  <input type="submit" value="search" class="green-background">
+</form>
