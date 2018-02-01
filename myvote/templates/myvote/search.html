@@ -10,22 +10,31 @@
   <input type="submit" value="search" class="green-background">
 </form>
 
-{% if user_search_results %}
-<h2>Users</h2>
-  {% for user in user_search_results %}
-    <div>
-      <a href="{% url 'account:view profile' user_id=user.id %}">{{ user.username }}</a>
-    </div>
-  {% endfor %}
-{% endif %}
 
-{% if poll_search_results %}
-<h2>Polls</h2>
-  {% for poll in poll_search_results %}
-  <div>
-    <a href="{% url 'view poll' poll_id=poll.id %}">{{ poll.name }}</a>
-  </div>
-  {% endfor %}
+{% if search_val %}
+  <h2>Search Results</h2>
+  <h3>Users</h3>
+  {% if user_search_results %}
+    {% for user in user_search_results %}
+      <div>
+        <a href="{% url 'account:view profile' user_id=user.id %}">{{ user.username }}</a>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>No users found matching <i>"{{ search_val }}"</i></p>
+  {% endif %}
+
+  <h3>Polls</h3>
+  {% if poll_search_results %}
+    {% for poll in poll_search_results %}
+    <div>
+      <a href="{% url 'view poll' poll_id=poll.id %}">{{ poll.name }}</a>
+    </div>
+    {% endfor %}
+  {% else %}
+  <p>No polls found matching <i>"{{ search_val }}"</i></p>
+  {% endif %}
+
 {% endif %}
 
 {% endblock %}

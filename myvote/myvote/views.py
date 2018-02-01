@@ -73,9 +73,6 @@ def search(request):
         poll_vector = SearchVector('name', weight='A') + SearchVector('description', weight='B')
         poll_query = SearchQuery(search_val)
         poll_search_results = Poll.objects.annotate(rank=SearchRank(poll_vector, poll_query)).filter(rank__gte=0.3).order_by('rank')[:10]
-        print('\n\n\n')
-        print(user_search_results)
-        print(poll_search_results)
     else:
         user_search_results = None
         poll_search_results = None
