@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% comment %}
+==============
+Search_Generic
+==============
+  Generic search results view. Provides a search_form to resubmit a search query.
+
+  Parameters (passed from view function):
+  - result_type (REQUIRED): the type of search result passed. Used for title/heading
+                            as well as determining search endpoint and result
+                            link.
+  - results (REQUIRED): the list of search results. Must be paginated.
+
+  Child templates:
+  - 'modules/search_form.html'
+      - parameters: None
+  - 'modules/pagination_navigation.html'
+      - parameters: list, url_param, next_val, prev_val
+
+  Passed Parameters (passed into child templates):
+
+
+{% endcomment %}
+
+{% block title %}Search {{ result_type }}s{% endblock %}
+
+{% block content %}
+
+<h2>Search {{ result_type }}s</h2>
+{% if results %}
+  {% for result in results %}
+  <div>
+    {% if result_type == "Poll" %}
+    <a href="{% url 'view poll' poll_id=result.id %}">{{ result.name }}</a>
+    {% else %}
+    <a href="{% url 'account:view profile' user_id=result.id %}">{{ result.username }}</a>
+    {% endif %}
+  </div>
+  {% endfor %}
+{% else %}
+<p>No results found matching <i>"{{ search_val }}"</i></p>
+{% endif %}
+
+{% with list=results url_param="&search_val="|add:search_val next_val="next" prev_val="prev" %}
+{% include "modules/pagination_navigation.html" %}
+{% endwith %}
+
+{% endblock %}
