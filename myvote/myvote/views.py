@@ -72,12 +72,12 @@ def search(request):
         user_search_results = User.objects.filter(username__icontains=search_val)[:10]
         poll_vector = SearchVector('name', weight='A') + SearchVector('description', weight='B')
         poll_query = SearchQuery(search_val)
-        poll_search_results = Poll.objects.annotate(rank=SearchRank(poll_vector, poll_query)).filter(rank__gte=0.3).order_by('rank')
+        poll_search_results = Poll.objects.annotate(rank=SearchRank(poll_vector, poll_query)).filter(rank__gte=0.3).order_by('rank')[:10]
     else:
         user_search_results = None
         poll_search_results = None
 
-    return render(request, 'myvote/search.html',
+    return render(request, 'myvote/search_all.html',
                   {'user_search_results': user_search_results,
                    'poll_search_results': poll_search_results,
                    'search_val': search_val,})
