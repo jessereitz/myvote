@@ -1,0 +1,43 @@
+{% comment %}
+===========
+User_Result
+===========
+  Reusable module to display an individual user in a list of search results.
+{% endcomment %}
+
+<div class="search_result_item">
+  <header class="sr_item_header">
+    <h3>
+      <a href="{% url 'account:view profile' user_id=result.id %}">
+        {{ result.username }}
+      </a>
+    </h3>
+  </header>
+  <section class="sr_item_user_polls">
+    <p>
+      {% if result.bio %}
+        {{ result.bio }}
+      {% else %}
+        This user doesn't have a bio.
+      {% endif %}
+    </p>
+    {% if result.polls.count > 0 %}
+      <table>
+        <tr>
+          <th>Recent Polls</th><th>Votes</th>
+        </tr>
+        {% for poll in result.polls.all|slice:":2" %}
+          <tr>
+            <td><a href="{% url 'view poll' poll_id=poll.id %}">
+            {{ poll.name }}</td>
+            <td>
+              {{ poll.votes.count }}
+            </td>
+          </tr>
+        {% endfor %}
+      </table>
+    {% else %}
+      No polls
+    {% endif %}
+  </section>
+</div>
