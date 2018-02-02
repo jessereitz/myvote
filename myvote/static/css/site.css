@@ -370,6 +370,7 @@ header.sr_item_header {
 
 header.sr_item_header h3 {
   margin: 0;
+  display: inline;
 }
 
 section.sr_item_user_polls {
