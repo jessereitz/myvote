@@ -25,7 +25,7 @@ function CreatePollForm(createPollForm, currentOptions) {
 
   this.createOptionInput = function(idNum) {
     let inputLabel = document.createElement('label');
-    inputLabel.for = "id_option" + idNum;
+    inputLabel.htmlFor = "id_option" + idNum;
     inputLabel.textContent = "option " + idNum + ":";
 
     let inputEl = document.createElement('input');
