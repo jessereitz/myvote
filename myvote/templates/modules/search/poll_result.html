@@ -1,0 +1,38 @@
+{% comment %}
+===========
+Poll_Result
+===========
+  Reusable module to display an individual poll in a list of search results.
+
+  No Parameters.
+{% endcomment %}
+
+<div class="search_result_item">
+  <header class="sr_item_header">
+    <h3>
+      <a href="{% url 'view poll' poll_id=result.id %}">
+        {{ result.name }}
+      </a>
+    </h3> by
+    <a href="{% url 'account:view profile' user_id=result.owner.id %}">
+      {{ result.owner.username }}
+    </a>
+  </header>
+  <section class="sr_item_user_polls">
+    <p>
+      {% if result.description %}
+        {{ result.description }}
+      {% else %}
+        This poll doesn't have a description.
+      {% endif %}
+    </p>
+    <p>
+      {{ result.votes.count }}
+      {% if result.votes.count == 1 %}
+        vote
+      {% else %}
+        votes
+      {% endif %}
+    </p>
+  </section>
+</div>
