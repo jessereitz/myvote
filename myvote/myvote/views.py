@@ -65,7 +65,7 @@ def explore_recent_polls(request, user_id):
     return render(request, 'myvote/recent_polls.html',
                   {'page_title': page_title, 'polls': polls})
 
-def search(request):
+def search_all(request):
     search_val = request.GET.get('search_val')
 
     if search_val:
