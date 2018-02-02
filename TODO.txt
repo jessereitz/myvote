@@ -1,4 +1,3 @@
-TODO: Profile search? Maybe not though...
 TODO: More than 2 options on a poll
 TODO: Restyle profile view
 TODO: Restyle poll view
