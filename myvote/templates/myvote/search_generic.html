@@ -31,22 +31,26 @@ Search_Generic
 
 {% include "modules/search/search_form.html" %}
 
+<div class="search_results block_center">
 {% if results %}
   {% for result in results %}
-  <div>
     {% if result_type == "Poll" %}
-    <a href="{% url 'view poll' poll_id=result.id %}">{{ result.name }}</a>
+    <!-- <a href="{% url 'view poll' poll_id=result.id %}">{{ result.name }}</a> -->
+      {% include "modules/search/poll_result.html" %}
     {% else %}
-    <a href="{% url 'account:view profile' user_id=result.id %}">{{ result.username }}</a>
+      {% include "modules/search/user_result.html" %}
     {% endif %}
-  </div>
   {% endfor %}
 {% else %}
 <p>No results found matching <i>"{{ search_val }}"</i></p>
 {% endif %}
 
+
 {% with list=results url_param="&search_val="|add:search_val next_val="next" prev_val="prev" %}
 {% include "modules/pagination_navigation.html" %}
 {% endwith %}
+</div>
+
+
 
 {% endblock %}
