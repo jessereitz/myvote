@@ -5,7 +5,7 @@
 
 {% block content %}
   <h1 class="text-center">Create a New Poll</h1>
-  <form method="POST" novalidate class="block_center" id="create_poll_form">
+  <form method="POST" class="block_center" id="create_poll_form">
     {% csrf_token %}
     {{ form }}
     <div id="form_buttons" class="text-center">
