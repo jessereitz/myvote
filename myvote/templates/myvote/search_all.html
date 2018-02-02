@@ -9,30 +9,29 @@
 
 
 {% if search_val %}
-  <h2>Search Results</h2>
-  <h3>Users</h3>
-  {% if user_search_results %}
-    {% for user in user_search_results %}
-      <div>
-        <a href="{% url 'account:view profile' user_id=user.id %}">{{ user.username }}</a>
-      </div>
-    {% endfor %}
-  <a href="{% url 'search users' %}?search_val={{ search_val }}">view all matching users -&gt;</a>
-  {% else %}
-    <p>No users found matching <i>"{{ search_val }}"</i></p>
-  {% endif %}
+  <h2 class="text-center">Results</h2>
+  <div class="search_results block_center">
+    <h3>Users</h3>
+    {% if user_search_results %}
+      {% for result in user_search_results %}
+        {% include "modules/search/user_result.html" %}
+      {% endfor %}
+      <a href="{% url 'search users' %}?search_val={{ search_val }}">view all matching users -&gt;</a>
+    {% else %}
+      <p>No users found matching <i>"{{ search_val }}"</i></p>
+    {% endif %}
 
-  <h3>Polls</h3>
-  {% if poll_search_results %}
-    {% for poll in poll_search_results %}
-    <div>
-      <a href="{% url 'view poll' poll_id=poll.id %}">{{ poll.name }}</a>
-    </div>
-    {% endfor %}
-  <a href="{% url 'search polls' %}?search_val={{ search_val }}">view all matching polls -&gt;</a>
-  {% else %}
-  <p>No polls found matching <i>"{{ search_val }}"g</i></p>
-  {% endif %}
+    <h3>Polls</h3>
+    {% if poll_search_results %}
+      {% for result in poll_search_results %}
+      {% include "modules/search/poll_result.html" %}
+      {% endfor %}
+      <a href="{% url 'search polls' %}?search_val={{ search_val }}">view all matching polls -&gt;</a>
+    {% else %}
+      <p>No polls found matching <i>"{{ search_val }}"g</i></p>
+    {% endif %}
+
+  </div>
 
 {% endif %}
 
