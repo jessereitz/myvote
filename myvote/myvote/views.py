@@ -119,8 +119,13 @@ def search_polls(request):
 
 @login_required
 def create_poll(request):
+    """
+        If GET request, displays PollCreationForm. If POST, validates
+        PollCreationForm and creates a poll based with given information.
+    """
     if request.method == 'POST':
-        form = PollCreationForm(request.POST)
+        options = [val for key, val in request.POST.items() if 'option' in key]
+        form = PollCreationForm(request.POST, options=options)
         if form.is_valid():
             poll_name = form.cleaned_data['name']
             poll_description = form.cleaned_data['description']
@@ -129,13 +134,21 @@ def create_poll(request):
                         owner=request.user)
             poll.save()
 
-            option1_text = form.cleaned_data['option1']
-            option1 = Option(option_text=option1_text, poll=poll)
-            option1.save()
+            options = [val for key, val in form.cleaned_data.items() if 'option' in key]
+            for option in options:
+                option = Option(option_text=option, poll=poll)
+                option.save()
+            # print('\n\n\n')
+            # print(options)
+            # print('\n\n\n')
 
-            option2_text = form.cleaned_data['option2']
-            option2 = Option(option_text=option2_text, poll=poll)
-            option2.save()
+            # option1_text = form.cleaned_data['option1']
+            # option1 = Option(option_text=option1_text, poll=poll)
+            # option1.save()
+
+            # option2_text = form.cleaned_data['option2']
+            # option2 = Option(option_text=option2_text, poll=poll)
+            # option2.save()
 
             messages.success(request, 'Poll successfully created.')
             return redirect(reverse('view poll', args=(poll.id,)))
