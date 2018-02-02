@@ -8,8 +8,13 @@ class PollCreationForm(forms.Form):
                                   widget=forms.Textarea(attrs=
                                     {'placeholder': DESC_PLACEHOLDER})
                                   )
-    option1 = forms.CharField(label="option 1", max_length=100)
-    option2 = forms.CharField(label="option 2", max_length=100)
+    option1 = forms.CharField(label="option 1", max_length=100,
+                              widget=forms.TextInput(attrs={'class': 'optionInput'}))
+    option2 = forms.CharField(label="option 2", max_length=100,
+                              widget=forms.TextInput(attrs={'class': 'optionInput'}))
+
+
+
 
 class PollDeletionForm(forms.Form):
     pass
