@@ -186,7 +186,8 @@ form textarea::placeholder {
   font-style:italic;
 }
 
-form input[type="submit"], form input[type="button"] {
+form input[type="submit"],
+form input[type="button"] {
   box-sizing: border-box;
   width: auto;
   display: inline-block;
