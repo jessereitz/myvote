@@ -1,14 +1,18 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Create Poll{% endblock %}
 
 {% block content %}
   <h1 class="text-center">Create a New Poll</h1>
-  <form method="POST" novalidate class="block_center">
+  <form method="POST" novalidate class="block_center" id="create_poll_form">
     {% csrf_token %}
     {{ form }}
-    <div class="text-center">
+    <div id="form_buttons" class="text-center">
       <input type="submit" value="Create Poll" class="green-background">
+      <input type="button" id="add_poll_option" value="add option">
     </div>
   </form>
+
+  <script type="text/javascript" src="{% static 'js/add_poll_option.js' %}"></script>
 {% endblock %}
