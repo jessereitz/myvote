@@ -11,7 +11,7 @@ I started this project with the intent on honing my Python skills and to familia
 Throughout the course of this project my skill level and comfort level with Django, and, more broadly, Python, have increased drastically. My conceptualization and understanding of data models has also improved over the evolution of this project. I feel confident these skills will be transferrable to any and all future projects, whether they be written in Django or another web framework.
 
 ## Installing
-If you would like to run this application locally, simple follow these steps:
+If you would like to run this application locally, simply follow these steps:
 
 1. Clone repo locally
 2. In the root of the cloned repo, create a virtual environment:
@@ -32,4 +32,7 @@ pip install -r requirements.txt
 sh makemigrations.sh
 sh migrate.sh
 ```
-7. Run the application: `sh runserver.sh`
+7. Run the application:
+```
+sh runserver.sh
+```
