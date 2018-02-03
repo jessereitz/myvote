@@ -12,7 +12,6 @@ from .forms import PollCreationForm, PollDeletionForm
 
 def index(request):
     """ Renders homepage/index view. """
-    # TODO: AJAX load more polls at end of page?
     if request.user.is_authenticated:
         followed_users = request.user.followed.values_list('followed_id')
         followed_poll_list = Poll.objects.filter(owner_id__in=followed_users).order_by('-datetime')
