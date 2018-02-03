@@ -18,6 +18,9 @@ class Poll(models.Model):
                 return True
         return False
 
+    class Meta:
+        ordering = ['-datetime']
+
 class Option(models.Model):
     option_text = models.CharField(max_length=100)
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name='options')
