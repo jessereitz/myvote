@@ -4,7 +4,7 @@
 
 {% block content %}
   <h1 class="text-center">{{ view_user.username }}</h1>
-  <div class="text-center">
+  <div class="text-center poll_stream block_center">
       {% if followed == "Self" %}
       <div>
         <a href="{% url 'account:overview' %}">settings</a>
@@ -36,5 +36,9 @@
     {% else %}
         <p class="block_center">This user hasn't added any polls yet!</p>
     {% endif %}
+
+    {% with list=poll_list %}
+      {% include "modules/pagination_navigation.html" %}
+    {% endwith %}
   </div>
 {% endblock %}

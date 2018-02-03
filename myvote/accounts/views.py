@@ -6,7 +6,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.paginator import Paginator
 
-
 from .forms import (SignUpForm, ChangePasswordForm,
                     ChangeEmailForm, DeleteAccountForm,
                     BioForm)
@@ -103,7 +102,10 @@ def view_profile(request, user_id):
             view_user = get_object_or_404(User, pk=user_id)
             followed = None
 
-        poll_list = view_user.polls.order_by('-datetime')[:10]
+        poll_list_query = view_user.polls.order_by('-datetime')
+        paginator = Paginator(poll_list_query, 10)
+        page = request.GET.get('page')
+        poll_list = paginator.get_page(page)
 
         return render(request, 'accounts/view_profile.html',
                       {'view_user': view_user, 'followed': followed,
