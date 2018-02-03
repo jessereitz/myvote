@@ -1,6 +1,7 @@
+TODO: Recent polls in user search result - update order_by to descend by date
 TODO: Restyle profile view
 TODO: Restyle poll view
 TODO: Share poll buttons (facebook, twitter)
-TODO: Email notifications (follows, and votes) --> I might add this after deploytin to heroku or something.
+TODO: Email notifications (follows, and votes) --> I might add this after deploying to heroku or something.
 TODO: Make email notifications subscribable (add to account_settings)
 TODO: Timezone selection
