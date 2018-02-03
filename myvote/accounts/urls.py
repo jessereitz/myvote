@@ -6,7 +6,7 @@ from . import views
 app_name = 'account'
 urlpatterns = [
     path('', views.account_settings, name='overview'),
-    path('view_profile/<int:user_id>', views.account_view_profile, name='view profile'),
+    path('view_profile/<int:user_id>', views.view_profile, name='view profile'),
     path('follow/<int:user_id>', views.follow_user, name='follow user'),
     path('unfollow/<int:user_id>', views.unfollow_user, name='unfollow user'),
     path('signup/', views.signup, name='signup'),

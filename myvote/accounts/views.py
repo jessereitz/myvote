@@ -4,6 +4,8 @@ from django.contrib.auth import login as auth_login
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.core.paginator import Paginator
+
 
 from .forms import (SignUpForm, ChangePasswordForm,
                     ChangeEmailForm, DeleteAccountForm,
@@ -66,7 +68,7 @@ def account_settings(request):
     if request.user.is_authenticated:
         return render(request, 'accounts/account_settings.html')
 
-def account_view_profile(request, user_id):
+def view_profile(request, user_id):
     """
         Display the profile page for a user. Includes username, recent polls.
         MUST be passed a user_id (otherwise it redirects). If not redirected,
