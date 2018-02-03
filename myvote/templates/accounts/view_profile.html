@@ -22,7 +22,7 @@
           <input type="submit" value="Unfollow">
         </form>
       {% else %}
-        {{ followed }}
+        <i><a href="{% url 'account:signup' %}">Sign up</a> to follow {{ view_user.username }}</i>
       {% endif %}
     <p class="block_center text-center">
         {{ view_user.bio.text }}
