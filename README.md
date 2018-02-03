@@ -13,7 +13,7 @@ Throughout the course of this project my skill level and comfort level with Djan
 ## Installing
 There are ___ main parts to setting up MyVote locally.
 
-First, ensure you have Postgres installed and running on your system. I suggest using [Postgress.app](https://postgresapp.com/) <a href="https://postgresapp.com/" target="_blank">Postgress.app</a> but any method of running Postgres should work. Once you have Postgres installed and running, you will need to create a database. Remember its name, host uri, port number, and username/password (if applicable). You will use these later.
+First, ensure you have Postgres installed and running on your system. I suggest using [Postgress.app](https://postgresapp.com/) but any method of running Postgres should work. Once you have Postgres installed and running, you will need to create a database. Remember its name, host uri, port number, and username/password (if applicable). You will use these later.
 
 Next, set up your local environment:
 1. Clone repo locally
