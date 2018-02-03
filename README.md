@@ -1,5 +1,5 @@
 # MyVote
-**A simple online polling platform**
+*A simple online polling platform*
 
 ## Overview
 MyVote is a simple polling platform written on top of the Django framework for Python.
