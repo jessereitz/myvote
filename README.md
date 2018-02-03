@@ -9,3 +9,11 @@ I started this project with the intent on honing my Python skills and to familia
 
 ## Skills Learned
 Throughout the course of this project my skill level and comfort level with Django, and, more broadly, Python, have increased drastically. My conceptualization and understanding of data models has also improved over the evolution of this project. I feel confident these skills will be transferrable to any and all future projects, whether they be written in Django or another web framework.
+
+## Installing
+If you would like to run this application locally, simple follow these steps:
+
+1. Clone repo locally
+2. In the root of the cloned repo, create a virtual environment: `virtualenv -p python3 venv`
+3. Activate virtual environment: `source venv/bin/activate`
+4. Install dependencies: `pip install requirements.txt`
