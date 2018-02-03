@@ -16,4 +16,11 @@ If you would like to run this application locally, simple follow these steps:
 1. Clone repo locally
 2. In the root of the cloned repo, create a virtual environment: `virtualenv -p python3 venv`
 3. Activate virtual environment: `source venv/bin/activate`
-4. Install dependencies: `pip install requirements.txt`
+4. Install dependencies: `pip install -r requirements.txt`
+5. CD into the scripts directory
+6. Ensure the database is up to date:
+```
+sh makemigrations.sh
+sh migrate.sh
+```
+7. Run the application: `sh runserver.sh`
