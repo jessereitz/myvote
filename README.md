@@ -1,2 +1,2 @@
-#MyVote
-##A simple online polling platform
+# MyVote
+## A simple online polling platform
