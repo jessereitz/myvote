@@ -1,3 +1,4 @@
+TODO: Paginate recent polls on view_profile
 TODO: Recent polls in user search result - update order_by to descend by date
 TODO: Restyle profile view
 TODO: Restyle poll view
