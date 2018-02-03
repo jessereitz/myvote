@@ -29,13 +29,38 @@ source venv/bin/activate
 ```
 pip install -r requirements.txt
 ```
-5. CD into the scripts directory
-6. Ensure the database is up to date:
+5. Set your environment variables:
+```
+$ export DEBUG='True/False'
+$ export DB_NAME='myvote'
+$ export DB_USER='your_db_username'
+$ export DB_PASSWORD='your_db_password'
+$ export DB_HOST='localhost'
+$ export DB_PORT='5432'
+```
+6. CD into the scripts directory
+7. Ensure the database is up to date:
 ```
 sh makemigrations.sh
 sh migrate.sh
 ```
-7. Run the application:
+
+Finally, run the server using one of the following methods:
+1. Debug mode:
 ```
 sh runserver.sh
+```
+2. Non-debug mode (note, this is not a "production mode". This method uses the Django dev server while still allowing you to view the custom error pages):
+```
+sh runserver_non_debug.sh
+```
+3. Manually (re)-set your environment variable and run the application through the manage.py file (found in the myvote directory):
+```
+$ export DEBUG='True/False'
+$ export DB_NAME='myvote'
+$ export DB_USER='your_db_username'
+$ export DB_PASSWORD='your_db_password'
+$ export DB_HOST='localhost'
+$ export DB_PORT='5432'
+python manage.py runserver
 ```
