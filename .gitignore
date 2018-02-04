@@ -16,3 +16,4 @@ build/
 venv/
 *.sqlite3
 .DS_Store
+TODO.txt
